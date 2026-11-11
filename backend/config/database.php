@@ -5,11 +5,21 @@ require_once __DIR__ . '/config.php';
 function getDBConnection(): PDO {
     static $pdo = null;
     if ($pdo === null) {
-        $host = getenv('DB_HOST') ?: '127.0.0.1';
-        $port = getenv('DB_PORT') ?: '3307';
-        $dbname = getenv('DB_NAME') ?: 'payben_db';
-        $user = getenv('DB_USER') ?: 'root';
-        $pass = getenv('DB_PASS') ?: '';
+        $dbUrl = getenv('DATABASE_URL') ?: getenv('MYSQL_URL') ?: '';
+        if (!empty($dbUrl)) {
+            $parsed = parse_url($dbUrl);
+            $host = $parsed['host'] ?? '127.0.0.1';
+            $port = $parsed['port'] ?? '3306';
+            $user = $parsed['user'] ?? 'root';
+            $pass = $parsed['pass'] ?? '';
+            $dbname = ltrim($parsed['path'] ?? 'payben_db', '/');
+        } else {
+            $host = getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: '127.0.0.1';
+            $port = getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: '3307';
+            $dbname = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'payben_db';
+            $user = getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root';
+            $pass = (getenv('DB_PASS') !== false && getenv('DB_PASS') !== '') ? getenv('DB_PASS') : (getenv('MYSQLPASSWORD') ?: '');
+        }
         $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
 
         $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";

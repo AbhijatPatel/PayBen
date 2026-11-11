@@ -36,7 +36,14 @@ if (!$isCli && !headers_sent()) {
         'http://localhost:8000'
     ];
 
-    if (in_array($origin, $allowedOrigins, true) || empty($origin)) {
+    $frontendEnv = getenv('FRONTEND_URL');
+    if ($frontendEnv) {
+        $allowedOrigins[] = rtrim($frontendEnv, '/');
+    }
+
+    $isVercel = (bool)preg_match('/^https?:\/\/[a-z0-9\-\.]+\.vercel\.app$/i', $origin);
+
+    if (in_array($origin, $allowedOrigins, true) || $isVercel || empty($origin)) {
         header('Access-Control-Allow-Origin: ' . ($origin ?: 'http://localhost:5173'));
     }
     header('Access-Control-Allow-Credentials: true');
