@@ -1,0 +1,24 @@
+# Environment
+mysql_data/
+*.log
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Dependencies (if added later)
+/vendor/
+/node_modules/
+
+# Temp
+/tmp/
+*.tmp
