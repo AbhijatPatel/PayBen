@@ -1,203 +1,186 @@
-# PayBen
+# PayBen – Decoupled Fintech Architecture
 
-A full-stack UPI payment, mobile recharge, and bill payment web app built with PHP and MySQL. Features a digital wallet, P2P transfers, scratch card rewards, and an admin panel.
+A production-grade, full-stack UPI payment, mobile recharge, and utility bill payment application featuring a modern **React.js SPA** frontend and a layered **PHP 8 REST API** backend with **MySQL**.
 
-> **Note**: All payments are simulated — no real money is involved. Built as a learning/portfolio project.
+![React](https://img.shields.io/badge/React-18.3-blue?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.4-purple?logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-8.3-777bb4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?logo=mysql&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-![PHP](https://img.shields.io/badge/PHP-8.0+-blue?logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-5.7+-orange?logo=mysql&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple?logo=bootstrap&logoColor=white)
+> **Note**: All financial transactions, recharges, and bill settlements are simulated in an isolated environment with zero real money risk.
 
 ---
 
-## What it does
+## Architecture Overview
 
-- **Mobile & DTH Recharge** — Browse plans by operator, select amount, pay from wallet
-- **Bill Payments** — Electricity, water, gas — fetch bill by consumer number, pay instantly
-- **Digital Wallet** — Add money, check balance, view transaction history
-- **UPI Transfers** — Send money to other users by mobile number or email
-- **Scratch Cards** — Random cashback rewards (₹5–₹50) after transactions
-- **Admin Dashboard** — Manage users, view all transactions, CRUD operators & plans
-
-## Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Frontend | HTML5, CSS3, Bootstrap 5.3, Vanilla JS |
-| Backend | PHP 8.0+ (PDO, sessions) |
-| Database | MySQL 5.7+ / MariaDB 10.4+ |
-| Server | Apache (XAMPP) or PHP built-in server |
-
-## Quick Start
-
-### Prerequisites
-
-- [XAMPP](https://www.apachefriends.org/) with PHP 8.0+ and MySQL — or standalone PHP + MySQL
-- A modern browser
-
-### Setup
-
-1. **Clone & place in your web root**
-
-   ```bash
-   git clone https://github.com/your-username/PayBen.git
-   # If using XAMPP, clone into C:\xampp\htdocs\PayBen
-   ```
-
-2. **Create the database**
-
-   Open phpMyAdmin (or any MySQL client) and import `database/payben_db.sql`:
-
-   ```bash
-   mysql -u root -p < database/payben_db.sql
-   ```
-
-3. **Configure database connection**
-
-   Edit `config/database.php` if your MySQL credentials differ from the defaults:
-
-   ```php
-   define('DB_HOST', '127.0.0.1');
-   define('DB_PORT', 3306);
-   define('DB_NAME', 'payben_db');
-   define('DB_USER', 'root');
-   define('DB_PASS', '');
-   ```
-
-4. **Start the server**
-
-   **Option A** — XAMPP: Start Apache + MySQL from the XAMPP control panel, then open `http://localhost/PayBen`
-
-   **Option B** — PHP built-in server:
-   ```bash
-   cd PayBen
-   php -S localhost:8000
-   # Open http://localhost:8000
-   ```
-
-5. **Login with test accounts**
-
-   | Role | Email | Password |
-   |------|-------|----------|
-   | User | `user1@test.com` | `password123` |
-   | User | `user2@test.com` | `password123` |
-   | Admin | `admin@payben.com` | `admin123` |
-
-   Both test users start with ₹5,000 in their wallet.
-
-## Project Structure
+PayBen adopts a strict two-tier decoupled architecture:
 
 ```
 PayBen/
-├── config/
-│   ├── config.php          # App constants, CSRF, helpers
-│   └── database.php        # PDO connection (singleton)
-├── includes/
-│   ├── auth.php            # Login/session checks
-│   ├── header.php          # HTML <head>, CSS imports
-│   ├── footer.php          # JS imports, toast notifications
-│   ├── navbar.php          # Top navigation bar
-│   └── sidebar.php         # Dashboard sidebar menu
-├── pages/
-│   ├── dashboard.php       # Main user dashboard
-│   ├── wallet.php          # Wallet balance & history
-│   ├── mobile-recharge.php # Mobile recharge flow
-│   ├── dth-recharge.php    # DTH recharge flow
-│   ├── electricity.php     # Electricity bill payment
-│   ├── water.php           # Water bill payment
-│   ├── gas.php             # Gas bill payment
-│   ├── transactions.php    # Transaction history
-│   └── profile.php         # User profile
-├── admin/
-│   ├── dashboard.php       # Admin overview & stats
-│   ├── users.php           # User management
-│   ├── transactions.php    # All transactions
-│   ├── manage-plans.php    # Recharge plans CRUD
-│   ├── manage-bills.php    # Utility bills management
-│   └── includes/           # Admin header, sidebar, footer
-├── api/
-│   ├── auth/               # login, register, logout
-│   ├── wallet/             # balance, add-money, transfer, history, scratch-card
-│   ├── recharge/           # mobile, dth, plans
-│   ├── bills/              # electricity, water, gas
-│   ├── transactions/       # list, details
-│   └── admin/              # dashboard stats, users, transactions
-├── assets/
-│   ├── css/style.css       # All styles
-│   └── js/app.js           # Client-side logic
-├── database/
-│   └── payben_db.sql       # Schema + seed data
-├── docs/
-│   ├── API_DOCUMENTATION.md
-│   ├── DATABASE_DESIGN.md
-│   └── SETUP_GUIDE.md
-├── login.php               # User login page
-├── register.php            # User registration
-├── index.php               # Landing page
-└── dashboard.php           # Dashboard (authenticated)
+├── frontend/                     # React.js Single Page Application (SPA)
+│   ├── public/                   # Static assets & favicon
+│   ├── src/
+│   │   ├── assets/               # CSS styles & design tokens
+│   │   ├── components/           # Reusable UI (Navbar, Sidebar, Modals)
+│   │   ├── context/              # Global state (AuthContext, ToastContext)
+│   │   ├── hooks/                # Custom React hooks
+│   │   ├── layouts/              # MainLayout & AdminLayout shells
+│   │   ├── pages/
+│   │   │   ├── auth/             # Login & Register views
+│   │   │   ├── admin/            # Admin analytics, users, and audit log
+│   │   │   ├── dashboard/        # GPay-inspired UPI dashboard
+│   │   │   ├── bills/            # Electricity, Water, and Gas bill pay
+│   │   │   ├── recharge/         # Prepaid Mobile & DTH recharge flows
+│   │   │   ├── wallet/           # Digital wallet, ledger, and UPI ID
+│   │   │   ├── transactions/     # Filterable statements and receipt view
+│   │   │   └── profile/          # User account settings
+│   │   ├── routes/               # AppRoutes with ProtectedRoute & AdminRoute
+│   │   ├── services/             # Axios API client modules
+│   │   ├── App.jsx               # App component
+│   │   └── main.jsx              # Application bootstrap
+│   ├── .env                      # Vite environment variables
+│   ├── package.json              # NPM dependencies
+│   └── vite.config.js            # Vite configuration & dev proxy
+│
+├── backend/                      # Layered PHP REST API Engine
+│   ├── api/                      # REST endpoints (JSON responses only)
+│   │   ├── admin/                # Admin auth, telemetry, and audit APIs
+│   │   ├── auth/                 # Login, register, me, logout endpoints
+│   │   ├── bills/                # Electricity, water, gas fetch & pay APIs
+│   │   ├── recharge/             # Operators, plans, mobile, DTH APIs
+│   │   ├── transactions/         # Statements, receipt details, dashboard summary
+│   │   └── wallet/               # Balance, add-money, transfer, scratch card
+│   ├── config/                   # Config loader & singleton PDO database
+│   ├── controllers/              # Application business logic controllers
+│   ├── models/                   # Data access objects (User, Wallet, Transaction...)
+│   ├── services/                 # Payment & ledger services
+│   ├── middleware/               # CORS preflight & auth session middleware
+│   ├── database/                 # Schema & seed data (payben_db.sql)
+│   ├── index.php                 # Healthcheck & API status endpoint
+│   └── .env                      # Database credentials & CORS origins
+│
+├── docs/                         # Architecture, API specifications, and setup docs
+├── .gitignore                    # Git exclusions
+├── LICENSE                       # MIT License
+└── README.md
 ```
 
-## API Endpoints
+---
 
-All API responses follow `{ "success": bool, "message": string, "data": {} }`.
+## Features
 
-### Auth
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register.php` | Create account |
-| POST | `/api/auth/login.php` | Login (returns session cookie) |
-| POST | `/api/auth/logout.php` | Logout |
+- **GPay-Style Dashboard** — Clean UPI balance card, 6 quick circular actions, network contacts carousel, and recent activity feed.
+- **Peer-to-Peer UPI Transfers** — Send money by mobile number, email, or `@payben` UPI handle with atomic double-entry balance locking.
+- **Scratch Card Cashback** — Interactive scratch card rewards (₹5–₹50) with confetti celebration.
+- **Mobile & DTH Recharge** — Operator selection, tabbed plan browsing (Unlimited, 1.5GB/day, Data packs), and instant checkout.
+- **Utility Bill Payments** — Electricity, water, and piped gas bill fetch by consumer number with receipt generation.
+- **Digital Wallet** — Top-up balance, view statements, and manage personal UPI handle.
+- **Admin Control Panel** — System analytics, user activation/suspension, and transaction audit logs.
 
-### Wallet
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/wallet/balance.php` | Get wallet balance |
-| POST | `/api/wallet/add-money.php` | Add funds to wallet |
-| POST | `/api/wallet/transfer.php` | Send money to another user |
-| GET | `/api/wallet/history.php` | Wallet transaction log |
-| POST | `/api/wallet/scratch-card.php` | Claim scratch card reward |
+---
 
-### Recharge & Bills
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/recharge/plans.php` | List plans by operator |
-| POST | `/api/recharge/mobile.php` | Process mobile recharge |
-| POST | `/api/recharge/dth.php` | Process DTH recharge |
-| GET | `/api/bills/electricity.php` | Fetch/pay electricity bill |
-| GET | `/api/bills/water.php` | Fetch/pay water bill |
-| GET | `/api/bills/gas.php` | Fetch/pay gas bill |
+## Quick Start Guide
 
-Full API docs with request/response examples: [docs/API_DOCUMENTATION.md](docs/API_DOCUMENTATION.md)
+### 1. Prerequisites
+- **Node.js** 18+ and **npm**
+- **PHP** 8.0+ with `pdo_mysql` extension enabled
+- **MySQL** 5.7+ or 8.0+
 
-## Database
+### 2. Database Setup
+Import the database schema into MySQL:
+```bash
+mysql -u root -p payben_db < backend/database/payben_db.sql
+```
 
-9 tables — `users`, `admins`, `wallets`, `wallet_transactions`, `operators`, `recharge_plans`, `utility_providers`, `sample_bills`, `transactions`.
+Ensure `backend/.env` points to your MySQL database:
+```env
+DB_HOST=127.0.0.1
+DB_PORT=3307
+DB_NAME=payben_db
+DB_USER=root
+DB_PASS=
+```
 
-All money columns use `DECIMAL(12,2)`. Wallet operations use `SELECT ... FOR UPDATE` inside transactions to prevent race conditions.
+### 3. Run Backend (PHP REST API)
+```bash
+cd backend
+php -S 127.0.0.1:8000
+```
+Backend API is live at `http://127.0.0.1:8000` (check health status at `http://127.0.0.1:8000/index.php`).
 
-Schema details: [docs/DATABASE_DESIGN.md](docs/DATABASE_DESIGN.md)
+### 4. Run Frontend (React + Vite)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open **`http://localhost:5173`** in your browser.
 
-## Security
+---
 
-- Passwords hashed with `password_hash()` (bcrypt)
-- Prepared statements everywhere (no raw SQL interpolation)
-- CSRF tokens on all forms
-- Session regeneration on login
-- XSS protection via `htmlspecialchars()` output encoding
-- HTTP-only, SameSite=Strict session cookies
+## Test Accounts
 
-## Screenshots
+| Role | Username / Email | Password | Initial Balance |
+| :--- | :--- | :--- | :--- |
+| User 1 | `user1@test.com` | `password123` | ₹5,000.00 |
+| User 2 | `user2@test.com` | `password123` | ₹5,000.00 |
+| Admin | `admin@payben.com` | `admin123` | N/A |
 
-After logging in, you'll see the dashboard with quick actions for recharge, bill pay, and wallet operations. The admin panel is at `/admin/login.php`.
+*New registrations automatically receive a ₹500.00 welcome bonus!*
 
-## Contributing
+---
 
-1. Fork it
-2. Create a branch (`git checkout -b feature/xyz`)
-3. Commit (`git commit -m 'Add xyz'`)
-4. Push (`git push origin feature/xyz`)
-5. Open a PR
+## REST API Endpoints Summary
+
+All backend responses return standard JSON: `{ "success": boolean, "message": string, "data": any }`.
+
+### Authentication
+- `POST /api/auth/login.php` — Authenticate and receive session token
+- `POST /api/auth/register.php` — Create account with ₹500 welcome credit
+- `GET /api/auth/me.php` — Current authenticated user profile
+- `POST /api/auth/logout.php` — Invalidate session
+
+### Wallet & UPI
+- `GET /api/wallet/balance.php` — Current wallet balance and UPI handle
+- `POST /api/wallet/add-money.php` — Top-up wallet funds
+- `POST /api/wallet/transfer.php` — P2P transfer by recipient identifier
+- `POST /api/wallet/scratch-card.php` — Claim mystery cashback reward
+- `GET /api/wallet/history.php` — Double-entry ledger audit trail
+
+### Recharges & Utilities
+- `GET /api/recharge/operators.php?type=mobile|dth` — List active providers
+- `GET /api/recharge/plans.php?operator_id=X` — Tariff plans for operator
+- `POST /api/recharge/mobile.php` — Execute prepaid mobile recharge
+- `POST /api/recharge/dth.php` — Execute DTH subscription payment
+- `GET /api/bills/{electricity|water|gas}.php?action=fetch&provider_id=X&consumer_number=Y` — Fetch bill
+- `POST /api/bills/{electricity|water|gas}.php` — Pay utility bill
+
+### Transactions
+- `GET /api/transactions/dashboard.php` — Dashboard metrics & recent feed
+- `GET /api/transactions/list.php?type=X&status=Y` — Filtered transaction log
+- `GET /api/transactions/details.php?id=X` — Single transaction receipt
+
+### Admin Portal
+- `POST /api/admin/login.php` — Administrator authentication
+- `GET /api/admin/dashboard.php` — Platform volume, users, and holdings telemetry
+- `GET /api/admin/users.php` — User directory with wallet balances
+- `POST /api/admin/users.php` — Toggle user suspension status
+- `GET /api/admin/transactions.php` — System-wide transaction audit log
+
+---
+
+## Security Implementations
+
+- **Strict CORS Policy** with explicit origin validation (`http://localhost:5173`) and credential support.
+- **SQL Injection Prevention** with 100% parameterized PDO statements and `emulate_prepares = false`.
+- **Concurrency Protection** using `SELECT ... FOR UPDATE` row-level locks on wallet operations inside atomic transactions.
+- **Password Security** using standard bcrypt hashing (`PASSWORD_BCRYPT`).
+- **Session Protection** via `HttpOnly`, `SameSite=Lax`, and session regeneration on authentication.
+
+---
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT © 2026 PayBen Platform.
