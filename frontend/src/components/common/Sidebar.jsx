@@ -115,3 +115,4 @@ export const Sidebar = ({ isOpen, onClose }) => {
     </>
   );
 };
+

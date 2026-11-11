@@ -172,3 +172,4 @@ export const Navbar = ({ onToggleSidebar, onOpenAddMoney }) => {
     </header>
   );
 };
+

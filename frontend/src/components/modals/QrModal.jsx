@@ -71,3 +71,4 @@ export const QrModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
+

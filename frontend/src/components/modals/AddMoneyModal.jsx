@@ -167,3 +167,4 @@ export const AddMoneyModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
+

@@ -16,3 +16,4 @@ jsonResponse([
         'admin' => ['login', 'dashboard', 'users', 'transactions']
     ]
 ]);
+

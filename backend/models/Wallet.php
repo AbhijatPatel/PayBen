@@ -201,3 +201,4 @@ class Wallet {
         return $stmt->fetchAll();
     }
 }
+

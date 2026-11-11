@@ -204,3 +204,4 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
     </div>
   );
 };
+

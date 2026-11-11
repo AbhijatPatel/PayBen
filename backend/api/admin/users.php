@@ -9,3 +9,4 @@ if ($method === 'POST') {
 } else {
     AdminController::users();
 }
+

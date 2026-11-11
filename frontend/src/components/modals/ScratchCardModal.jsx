@@ -115,3 +115,4 @@ export const ScratchCardModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
+

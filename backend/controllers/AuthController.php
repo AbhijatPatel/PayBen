@@ -159,3 +159,4 @@ class AuthController {
         jsonResponse(['success' => true, 'message' => 'Logged out successfully.']);
     }
 }
+
