@@ -32,6 +32,16 @@ function getDBConnection(): PDO {
 
         try {
             $pdo = new PDO($dsn, $user, $pass, $options);
+            // Verify if tables exist; if not, initialize database from schema
+            try {
+                $test = $pdo->query("SELECT 1 FROM users LIMIT 1");
+            } catch (\Throwable $tb) {
+                $sqlPath = dirname(__DIR__) . '/database/payben_db.sql';
+                if (file_exists($sqlPath)) {
+                    $sqlContent = file_get_contents($sqlPath);
+                    $pdo->exec($sqlContent);
+                }
+            }
         } catch (PDOException $e) {
             // Attempt fallback to default port 3306 if 3307 failed
             if ($port === '3307') {

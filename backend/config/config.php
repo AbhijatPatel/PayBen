@@ -33,7 +33,8 @@ if (!$isCli && !headers_sent()) {
         'http://localhost:5173',
         'http://127.0.0.1:5173',
         'http://localhost:3000',
-        'http://localhost:8000'
+        'http://localhost:8000',
+        'https://frontend-3p6j.vercel.app'
     ];
 
     $frontendEnv = getenv('FRONTEND_URL');
