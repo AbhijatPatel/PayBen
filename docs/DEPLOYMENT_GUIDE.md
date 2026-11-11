@@ -78,3 +78,4 @@ If deploying to a self-hosted Ubuntu VPS (DigitalOcean / AWS / Hetzner):
    cd PayBen
    ```
 3. Run with Docker Compose or Nginx proxying port 8000 for backend and serving `frontend/dist` for frontend.
+
