@@ -12,10 +12,12 @@ RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/Allo
 # Copy backend files to web root
 COPY . /var/www/html/
 
+# Make entrypoint script executable
+RUN chmod +x /var/www/html/docker-entrypoint.sh
+
 # Fix permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
 
-# Configure Apache port dynamically for Railway ($PORT) and run foreground
-CMD sh -c 'sed -i "s/Listen 80/Listen ${PORT:-80}/g" /etc/apache2/ports.conf && sed -i "s/:80/:${PORT:-80}/g" /etc/apache2/sites-available/000-default.conf && apache2-foreground'
+ENTRYPOINT ["/var/www/html/docker-entrypoint.sh"]
