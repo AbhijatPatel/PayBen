@@ -11,17 +11,25 @@ import {
   History,
   Shield,
   User,
-  X
+  X,
+  Landmark,
+  Repeat,
+  CreditCard,
+  TrendingUp,
+  Sparkles
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { name: 'Wallet & UPI', path: '/wallet', icon: Wallet },
+  { name: 'Bank Accounts', path: '/banking/accounts', icon: Landmark },
+  { name: 'UPI Lite (Zero PIN)', path: '/financial/upi-lite', icon: Zap },
+  { name: 'AutoPay Mandates', path: '/financial/autopay', icon: Repeat },
+  { name: 'Pocket Money', path: '/financial/pocket-money', icon: Sparkles },
+  { name: 'Cards Vault', path: '/financial/cards', icon: CreditCard },
+  { name: 'CIBIL & Loans', path: '/financial/cibil-loans', icon: TrendingUp },
   { name: 'Mobile Recharge', path: '/recharge/mobile', icon: Smartphone },
-  { name: 'DTH Recharge', path: '/recharge/dth', icon: Tv },
   { name: 'Electricity Bill', path: '/bills/electricity', icon: Zap },
-  { name: 'Water Bill', path: '/bills/water', icon: Droplet },
-  { name: 'Gas Bill', path: '/bills/gas', icon: Flame },
   { name: 'Transactions', path: '/transactions', icon: History },
   { name: 'Security & Privacy', path: '/security', icon: Shield },
   { name: 'Profile', path: '/profile', icon: User },

@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Link, useOutletContext } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useSecurity } from '../../context/SecurityContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { useFintech } from '../../context/FintechContext';
 import { transactionService } from '../../services/transactionService';
 import { soundService } from '../../services/soundService';
+import { PromotionalBanners } from '../../components/common/PromotionalBanners';
 import { SendMoneyModal } from '../../components/modals/SendMoneyModal';
 import { ScanPayModal } from '../../components/modals/ScanPayModal';
 import { QrModal } from '../../components/modals/QrModal';
@@ -33,11 +36,17 @@ import {
   Lock,
   Wallet as WalletIcon,
   Wifi,
-  CreditCard
+  CreditCard,
+  Building2,
+  PiggyBank,
+  TrendingUp,
+  Percent
 } from 'lucide-react';
 
 export const Dashboard = () => {
   const { user, wallet, refreshBalance } = useAuth();
+  const { t } = useLanguage();
+  const { upiLiteBalance, upiLiteEnabled, cibilScore, pocketMoneyBalance } = useFintech();
   const {
     hideBalance,
     toggleHideBalance,
@@ -240,6 +249,107 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* ---------------- PROMOTIONAL AD ROTATOR BANNERS ---------------- */}
+      <PromotionalBanners />
+
+      {/* ---------------- SUPER-APP FINTECH HUB (PhonePe / GPay / Paytm) ---------------- */}
+      <section className="bg-white rounded-3xl p-6 border border-gray-200/80 shadow-xs space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-black text-gray-900">{t('fintechHub')}</h2>
+              <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white tracking-wide">
+                Super App
+              </span>
+            </div>
+            <p className="text-xs text-gray-500">Bank accounts, zero-PIN UPI Lite, AutoPay & credit power</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {/* Bank Accounts */}
+          <Link
+            to="/banking/accounts"
+            className="p-3.5 rounded-2xl border border-gray-100 hover:border-blue-300 hover:bg-blue-50/30 transition-all flex flex-col items-center text-center group bg-gradient-to-b from-white to-gray-50/50"
+          >
+            <div className="w-11 h-11 rounded-2xl bg-blue-50 text-[#0047cc] flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-[#0047cc] group-hover:text-white transition-all shadow-xs">
+              <Building2 className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-gray-900">{t('bankAccounts')}</span>
+            <span className="text-[10px] text-gray-400 mt-0.5">Link & Check Bal</span>
+          </Link>
+
+          {/* UPI Lite */}
+          <Link
+            to="/financial/upi-lite"
+            className="p-3.5 rounded-2xl border border-gray-100 hover:border-amber-300 hover:bg-amber-50/30 transition-all flex flex-col items-center text-center group bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden"
+          >
+            <span className="absolute top-1.5 right-1.5 text-[8px] font-black bg-amber-500 text-white px-1.5 py-0.2 rounded-full">
+              ₹{upiLiteBalance.toFixed(0)}
+            </span>
+            <div className="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-xs">
+              <Zap className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-gray-900">{t('upiLite')}</span>
+            <span className="text-[10px] text-amber-600 font-semibold mt-0.5">Zero-PIN Pay</span>
+          </Link>
+
+          {/* AutoPay */}
+          <Link
+            to="/financial/autopay"
+            className="p-3.5 rounded-2xl border border-gray-100 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all flex flex-col items-center text-center group bg-gradient-to-b from-white to-gray-50/50"
+          >
+            <div className="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-xs">
+              <RefreshCw className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-gray-900">{t('autopay')}</span>
+            <span className="text-[10px] text-gray-400 mt-0.5">SIP & Mandates</span>
+          </Link>
+
+          {/* Pocket Money */}
+          <Link
+            to="/financial/pocket-money"
+            className="p-3.5 rounded-2xl border border-gray-100 hover:border-purple-300 hover:bg-purple-50/30 transition-all flex flex-col items-center text-center group bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden"
+          >
+            <span className="absolute top-1.5 right-1.5 text-[8px] font-black bg-purple-500 text-white px-1.5 py-0.2 rounded-full">
+              ₹{pocketMoneyBalance.toFixed(0)}
+            </span>
+            <div className="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all shadow-xs">
+              <PiggyBank className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-gray-900">{t('pocketMoney')}</span>
+            <span className="text-[10px] text-purple-600 font-semibold mt-0.5">Teen Allowance</span>
+          </Link>
+
+          {/* Cards Pay */}
+          <Link
+            to="/financial/cards"
+            className="p-3.5 rounded-2xl border border-gray-100 hover:border-emerald-300 hover:bg-emerald-50/30 transition-all flex flex-col items-center text-center group bg-gradient-to-b from-white to-gray-50/50"
+          >
+            <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-xs">
+              <CreditCard className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-gray-900">{t('cardsPay')}</span>
+            <span className="text-[10px] text-gray-400 mt-0.5">Vault & Pay</span>
+          </Link>
+
+          {/* CIBIL Score & Loans */}
+          <Link
+            to="/financial/cibil-loans"
+            className="p-3.5 rounded-2xl border border-gray-100 hover:border-rose-300 hover:bg-rose-50/30 transition-all flex flex-col items-center text-center group bg-gradient-to-b from-white to-gray-50/50 relative overflow-hidden"
+          >
+            <span className="absolute top-1.5 right-1.5 text-[8px] font-black bg-emerald-600 text-white px-1.5 py-0.2 rounded-full">
+              {cibilScore}
+            </span>
+            <div className="w-11 h-11 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mb-2 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition-all shadow-xs">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold text-gray-900">{t('cibilLoan')}</span>
+            <span className="text-[10px] text-emerald-600 font-bold mt-0.5">Pre-Approved</span>
+          </Link>
+        </div>
+      </section>
 
       {/* ---------------- 2. PEOPLE ON PAYBEN (QUICK SEND AVATARS) ---------------- */}
       {summary?.contacts?.length > 0 && (

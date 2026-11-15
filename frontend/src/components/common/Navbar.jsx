@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useSecurity } from '../../context/SecurityContext';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   Wallet as WalletIcon,
   Search,
@@ -15,12 +16,19 @@ import {
   Shield,
   Lock,
   Eye,
-  EyeOff
+  EyeOff,
+  Globe,
+  Landmark,
+  Zap,
+  Repeat,
+  CreditCard,
+  TrendingUp
 } from 'lucide-react';
 
 export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenMyQr }) => {
   const { user, wallet, logout } = useAuth();
   const { hideBalance, toggleHideBalance, lockApp, appLockEnabled } = useSecurity();
+  const { lang, toggleLanguage, t } = useLanguage();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -115,6 +123,16 @@ export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenM
                 </button>
               </div>
 
+              {/* Language Switcher Pill */}
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-700 transition"
+                title="Switch Language (English / हिन्दी)"
+              >
+                <Globe className="w-3.5 h-3.5 text-[#0047cc]" />
+                <span>{lang === 'en' ? 'हिन्दी' : 'English'}</span>
+              </button>
+
               {/* App Lock Button */}
               {appLockEnabled && (
                 <button
@@ -157,6 +175,46 @@ export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenM
                     >
                       <User className="w-4 h-4 text-gray-400" />
                       My Profile
+                    </Link>
+
+                    <Link
+                      to="/banking/accounts"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      <Landmark className="w-4 h-4 text-[#0047cc]" />
+                      Bank Accounts & UPI
+                    </Link>
+
+                    <Link
+                      to="/financial/upi-lite"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      <Zap className="w-4 h-4 text-[#ff6200]" />
+                      UPI Lite (Zero PIN)
+                    </Link>
+
+                    <Link
+                      to="/financial/autopay"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      <Repeat className="w-4 h-4 text-emerald-600" />
+                      AutoPay Mandates
+                    </Link>
+
+                    <Link
+                      to="/financial/cards"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      <CreditCard className="w-4 h-4 text-indigo-600" />
+                      Credit & Debit Cards
+                    </Link>
+
+                    <Link
+                      to="/financial/cibil-loans"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition"
+                    >
+                      <TrendingUp className="w-4 h-4 text-emerald-600" />
+                      CIBIL Score & Loans
                     </Link>
 
                     <Link

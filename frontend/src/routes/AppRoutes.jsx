@@ -17,6 +17,12 @@ import { GasBill } from '../pages/bills/GasBill';
 import { Transactions } from '../pages/transactions/Transactions';
 import { Profile } from '../pages/profile/Profile';
 import { SecuritySettings } from '../pages/profile/SecuritySettings';
+import { BankAccounts } from '../pages/banking/BankAccounts';
+import { UpiLite } from '../pages/financial/UpiLite';
+import { AutoPay } from '../pages/financial/AutoPay';
+import { PocketMoney } from '../pages/financial/PocketMoney';
+import { CardsPay } from '../pages/financial/CardsPay';
+import { CibilLoan } from '../pages/financial/CibilLoan';
 
 import { AdminLogin } from '../pages/admin/AdminLogin';
 import { AdminDashboard } from '../pages/admin/AdminDashboard';
@@ -127,6 +133,54 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <SecuritySettings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="banking/accounts"
+          element={
+            <ProtectedRoute>
+              <BankAccounts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="financial/upi-lite"
+          element={
+            <ProtectedRoute>
+              <UpiLite />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="financial/autopay"
+          element={
+            <ProtectedRoute>
+              <AutoPay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="financial/pocket-money"
+          element={
+            <ProtectedRoute>
+              <PocketMoney />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="financial/cards"
+          element={
+            <ProtectedRoute>
+              <CardsPay />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="financial/cibil-loans"
+          element={
+            <ProtectedRoute>
+              <CibilLoan />
             </ProtectedRoute>
           }
         />
