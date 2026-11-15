@@ -2,65 +2,118 @@
 
 require_once __DIR__ . '/config.php';
 
-function getDBConnection(): PDO {
-    static $pdo = null;
-    if ($pdo === null) {
-        $dbUrl = getenv('DATABASE_URL') ?: getenv('MYSQL_URL') ?: '';
-        if (!empty($dbUrl)) {
-            $parsed = parse_url($dbUrl);
-            $host = $parsed['host'] ?? '127.0.0.1';
-            $port = $parsed['port'] ?? '3306';
-            $user = $parsed['user'] ?? 'root';
-            $pass = $parsed['pass'] ?? '';
-            $dbname = ltrim($parsed['path'] ?? 'payben_db', '/');
-        } else {
-            $host = getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: '127.0.0.1';
-            $port = getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: '3307';
-            $dbname = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'payben_db';
-            $user = getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root';
-            $pass = (getenv('DB_PASS') !== false && getenv('DB_PASS') !== '') ? getenv('DB_PASS') : (getenv('MYSQLPASSWORD') ?: '');
-        }
-        $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
+function getDatabaseConfig(): array {
+    $dbUrl = getenv('DATABASE_URL') ?: getenv('MYSQL_URL') ?: '';
 
-        $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";
-        $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES {$charset} COLLATE {$charset}_unicode_ci"
+    if (!empty($dbUrl)) {
+        $parsed = parse_url($dbUrl);
+        return [
+            'host' => $parsed['host'] ?? '127.0.0.1',
+            'port' => (string)($parsed['port'] ?? '3306'),
+            'dbname' => ltrim($parsed['path'] ?? 'payben_db', '/'),
+            'user' => $parsed['user'] ?? 'root',
+            'password' => $parsed['pass'] ?? '',
+            'charset' => getenv('DB_CHARSET') ?: 'utf8mb4',
         ];
+    }
 
-        try {
-            $pdo = new PDO($dsn, $user, $pass, $options);
-            // Verify if tables exist; if not, initialize database from schema
-            try {
-                $test = $pdo->query("SELECT 1 FROM users LIMIT 1");
-            } catch (\Throwable $tb) {
-                $sqlPath = dirname(__DIR__) . '/database/payben_db.sql';
-                if (file_exists($sqlPath)) {
-                    $sqlContent = file_get_contents($sqlPath);
-                    $pdo->exec($sqlContent);
+    $host = getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: '127.0.0.1';
+    $port = getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: '3306';
+    $dbname = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'payben_db';
+    $user = getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root';
+    $password = getenv('DB_PASS');
+    if ($password === false || $password === '') {
+        $password = getenv('MYSQLPASSWORD') ?: '';
+    }
+
+    return [
+        'host' => $host,
+        'port' => (string)$port,
+        'dbname' => $dbname,
+        'user' => $user,
+        'password' => $password,
+        'charset' => getenv('DB_CHARSET') ?: 'utf8mb4',
+    ];
+}
+
+function getDatabaseConnectionCandidates(): array {
+    $config = getDatabaseConfig();
+    $hosts = array_values(array_unique([$config['host'], '127.0.0.1', 'localhost', 'db', 'mysql']));
+    $ports = array_values(array_unique([$config['port'], '3306', '3307']));
+    $users = array_values(array_unique([$config['user'], 'root', 'mysql', 'payben']));
+    $passwords = array_values(array_unique([
+        $config['password'],
+        '',
+        getenv('MYSQL_ROOT_PASSWORD') ?: '',
+        getenv('MYSQL_PASSWORD') ?: '',
+        getenv('DB_PASS') ?: '',
+        'root',
+        'password',
+    ]));
+    $dbNames = array_values(array_unique([$config['dbname'], 'payben_db', 'mysql']));
+
+    $candidates = [];
+    foreach ($hosts as $host) {
+        foreach ($ports as $port) {
+            foreach ($users as $user) {
+                foreach ($passwords as $password) {
+                    foreach ($dbNames as $dbname) {
+                        $candidates[] = [
+                            'host' => $host,
+                            'port' => $port,
+                            'dbname' => $dbname,
+                            'user' => $user,
+                            'password' => $password,
+                            'charset' => $config['charset'],
+                        ];
+                    }
                 }
             }
-        } catch (PDOException $e) {
-            // Attempt fallback to default port 3306 if 3307 failed
-            if ($port === '3307') {
-                try {
-                    $dsnFallback = "mysql:host={$host};port=3306;dbname={$dbname};charset={$charset}";
-                    $pdo = new PDO($dsnFallback, $user, $pass, $options);
-                    return $pdo;
-                } catch (PDOException $e2) {
-                    // Ignore fallback error
-                }
-            }
-
-            error_log("Database connection error: " . $e->getMessage());
-            jsonResponse([
-                'success' => false,
-                'message' => 'Database connection failed. Please ensure MySQL is running.'
-            ], 500);
         }
     }
-    return $pdo;
+
+    return $candidates;
+}
+
+function getDBConnection(): PDO {
+    static $pdo = null;
+    if ($pdo !== null) {
+        return $pdo;
+    }
+
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ];
+
+    $lastError = null;
+    $sqlPath = dirname(__DIR__) . '/database/payben_db.sql';
+
+    foreach (getDatabaseConnectionCandidates() as $candidate) {
+        try {
+            $dsn = "mysql:host={$candidate['host']};port={$candidate['port']};dbname={$candidate['dbname']};charset={$candidate['charset']}";
+            $pdo = new PDO($dsn, $candidate['user'], $candidate['password'], $options);
+
+            try {
+                $pdo->query("SELECT 1 FROM users LIMIT 1");
+            } catch (\Throwable $tb) {
+                if (file_exists($sqlPath)) {
+                    $schemaSql = file_get_contents($sqlPath);
+                    $pdo->exec($schemaSql);
+                }
+            }
+
+            return $pdo;
+        } catch (PDOException $e) {
+            $lastError = $e;
+        }
+    }
+
+    error_log("Database connection error: " . ($lastError ? $lastError->getMessage() : 'Unknown database error'));
+    jsonResponse([
+        'success' => false,
+        'message' => 'Database connection failed. Please ensure MySQL is running and the configured credentials are valid.'
+    ], 500);
 }
 

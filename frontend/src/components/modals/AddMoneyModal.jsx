@@ -79,7 +79,7 @@ export const AddMoneyModal = ({ isOpen, onClose }) => {
             </div>
             <button
               onClick={handleClose}
-              className="w-full py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold rounded-2xl transition"
+              className="w-full py-3 bg-[#102f6f] hover:bg-[#0b2450] text-white font-bold rounded-2xl transition"
             >
               Continue
             </button>
@@ -99,7 +99,7 @@ export const AddMoneyModal = ({ isOpen, onClose }) => {
                   step="any"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-2xl font-bold text-gray-900"
+                  className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-2xl font-bold text-gray-900"
                 />
               </div>
 
@@ -112,7 +112,7 @@ export const AddMoneyModal = ({ isOpen, onClose }) => {
                     onClick={() => setAmount(val.toString())}
                     className={`py-2 text-xs font-bold rounded-xl border transition ${
                       amount === val.toString()
-                        ? 'bg-blue-50 border-[#1a73e8] text-[#1a73e8]'
+                        ? 'bg-blue-50 border-[#102f6f] text-[#102f6f]'
                         : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100'
                     }`}
                   >
@@ -132,7 +132,7 @@ export const AddMoneyModal = ({ isOpen, onClose }) => {
                     onClick={() => setMethod(m)}
                     className={`p-2.5 rounded-xl border text-xs font-bold text-center transition ${
                       method === m
-                        ? 'bg-blue-50 border-[#1a73e8] text-[#1a73e8]'
+                        ? 'bg-blue-50 border-[#102f6f] text-[#102f6f]'
                         : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                     }`}
                   >
@@ -150,7 +150,7 @@ export const AddMoneyModal = ({ isOpen, onClose }) => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#1a73e8] hover:bg-[#1557b0] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
+              className="w-full py-3 bg-[#102f6f] hover:bg-[#0b2450] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
             >
               {loading ? (
                 <>

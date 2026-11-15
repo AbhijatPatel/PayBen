@@ -52,7 +52,7 @@ export const WalletPage = () => {
   return (
     <div className="space-y-6 max-w-4xl mx-auto pb-10">
       {/* Wallet Card */}
-      <div className="rounded-3xl bg-gradient-to-tr from-[#1a73e8] to-[#1557b0] text-white p-6 sm:p-8 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="rounded-3xl bg-gradient-to-tr from-[#102f6f] to-[#0b2450] text-white p-6 sm:p-8 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <WalletIcon className="w-6 h-6 text-blue-200" />
@@ -80,7 +80,7 @@ export const WalletPage = () => {
             onClick={() => setAddOpen(true)}
             className="px-5 py-3 rounded-2xl bg-white text-gray-900 font-bold text-sm flex items-center gap-2 hover:bg-gray-100 transition shadow-md"
           >
-            <Plus className="w-4 h-4 text-[#1a73e8]" />
+            <Plus className="w-4 h-4 text-[#102f6f]" />
             <span>Add Funds</span>
           </button>
           <button

@@ -94,7 +94,7 @@ export const WaterBill = () => {
           </div>
           <button
             onClick={() => { setReceipt(null); setBill(null); }}
-            className="w-full py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold rounded-2xl transition"
+            className="w-full py-3 bg-[#102f6f] hover:bg-[#0b2450] text-white font-bold rounded-2xl transition"
           >
             Pay Another Bill
           </button>

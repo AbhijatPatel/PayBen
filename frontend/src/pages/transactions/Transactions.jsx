@@ -58,7 +58,7 @@ export const Transactions = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#1a73e8] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#102f6f] flex items-center justify-center">
             <History className="w-5 h-5" />
           </div>
           <div>
@@ -94,7 +94,7 @@ export const Transactions = () => {
             placeholder="Search by ID, number, provider..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-50 text-sm outline-none border border-transparent focus:border-[#1a73e8] focus:bg-white transition"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-50 text-sm outline-none border border-transparent focus:border-[#102f6f] focus:bg-white transition"
           />
         </div>
 
@@ -242,7 +242,7 @@ export const Transactions = () => {
               </button>
               <button
                 onClick={() => setSelectedTx(null)}
-                className="flex-1 py-2.5 rounded-xl bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-xs"
+                className="flex-1 py-2.5 rounded-xl bg-[#102f6f] hover:bg-[#0b2450] text-white font-bold text-xs"
               >
                 Close
               </button>

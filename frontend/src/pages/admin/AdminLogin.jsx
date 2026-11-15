@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
-import { ShieldCheck, Lock, User, Loader2, ArrowRight } from 'lucide-react';
+import { Lock, User, Loader2, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export const AdminLogin = () => {
-  const [username, setUsername] = useState('admin@payben.com');
-  const [password, setPassword] = useState('admin123');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const { addToast } = useToast();
   const navigate = useNavigate();
@@ -31,25 +31,21 @@ export const AdminLogin = () => {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6 text-slate-100 shadow-2xl">
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-purple-600 text-white flex items-center justify-center mx-auto shadow-lg shadow-purple-600/30">
-            <ShieldCheck className="w-8 h-8" />
+        <div className="text-center space-y-3">
+          <div className="p-3 bg-white/5 rounded-2xl inline-block border border-white/10 shadow-md">
+            <img
+              src="/payben-logo.png"
+              alt="PayBen"
+              className="h-10 w-auto mx-auto object-contain"
+            />
           </div>
-          <h2 className="text-2xl font-black tracking-tight">PayBen Admin</h2>
-          <p className="text-xs text-slate-400">Restricted staff oversight access</p>
-        </div>
-
-        {/* Credentials Box */}
-        <div className="p-3 bg-purple-950/40 border border-purple-800/40 rounded-2xl text-xs space-y-1">
-          <span className="font-bold text-purple-400">Default Admin Credentials</span>
-          <p className="text-slate-400 font-mono text-[11px]">
-            User: <strong className="text-white">admin@payben.com</strong> • Pass: <strong className="text-white">admin123</strong>
-          </p>
+          <h2 className="text-2xl font-black tracking-tight text-white">PayBen Administration</h2>
+          <p className="text-xs text-slate-400">Encrypted Enterprise Back-Office Portal</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1">Username / Email</label>
+            <label className="block text-xs font-semibold text-slate-400 mb-1">Staff Username / Email</label>
             <div className="relative">
               <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -57,13 +53,14 @@ export const AdminLogin = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500 transition"
+                placeholder="admin@payben.com"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-slate-100 text-sm outline-none focus:border-[#ff6200] transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1">Password</label>
+            <label className="block text-xs font-semibold text-slate-400 mb-1">Staff Password</label>
             <div className="relative">
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -71,7 +68,8 @@ export const AdminLogin = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-slate-100 text-sm outline-none focus:border-purple-500 transition"
+                placeholder="••••••••"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-800 border border-slate-700 text-slate-100 text-sm outline-none focus:border-[#ff6200] transition"
               />
             </div>
           </div>
@@ -79,13 +77,19 @@ export const AdminLogin = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition"
+            className="w-full py-3.5 bg-gradient-to-r from-[#0047cc] to-[#ff6200] hover:brightness-110 disabled:opacity-50 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-lg shadow-orange-500/20"
           >
-            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Access Control Panel</span>}
+            {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <span>Access Administration Console</span>}
           </button>
         </form>
+
+        <div className="text-center pt-2">
+          <p className="text-[11px] text-slate-500 flex items-center justify-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+            <span>Role-Based Access Control • 256-Bit SSL Secured</span>
+          </p>
+        </div>
       </div>
     </div>
   );
 };
-

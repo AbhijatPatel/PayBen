@@ -60,7 +60,7 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-blue-50 text-[#1a73e8] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-blue-50 text-[#102f6f] flex items-center justify-center">
               <Send className="w-4 h-4" />
             </div>
             <h3 className="font-bold text-gray-900">Send Money via UPI</h3>
@@ -105,7 +105,7 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
 
             <button
               onClick={handleClose}
-              className="w-full py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold rounded-2xl transition shadow-sm"
+              className="w-full py-3 bg-[#102f6f] hover:bg-[#0b2450] text-white font-bold rounded-2xl transition shadow-sm"
             >
               Done
             </button>
@@ -125,7 +125,7 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
                   placeholder="e.g. 9876543210 or user@test.com"
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
                 />
               </div>
             </div>
@@ -149,7 +149,7 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-xl font-bold text-gray-900"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-xl font-bold text-gray-900"
                 />
               </div>
 
@@ -160,7 +160,7 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
                     key={amt}
                     type="button"
                     onClick={() => setAmount(amt.toString())}
-                    className="text-xs font-semibold bg-gray-100 hover:bg-blue-50 hover:text-[#1a73e8] px-3 py-1.5 rounded-lg transition"
+                    className="text-xs font-semibold bg-gray-100 hover:bg-blue-50 hover:text-[#102f6f] px-3 py-1.5 rounded-lg transition"
                   >
                     +₹{amt}
                   </button>
@@ -177,14 +177,14 @@ export const SendMoneyModal = ({ isOpen, onClose, initialRecipient = '' }) => {
                 placeholder="Dinner, Recharge, Gift..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#1a73e8] hover:bg-[#1557b0] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
+              className="w-full py-3 bg-[#102f6f] hover:bg-[#0b2450] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
             >
               {loading ? (
                 <>

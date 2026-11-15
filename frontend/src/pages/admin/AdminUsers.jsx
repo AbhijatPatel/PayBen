@@ -45,7 +45,7 @@ export const AdminUsers = () => {
       <div className="rounded-2xl bg-slate-800/80 border border-slate-700/60 p-5 overflow-hidden">
         {loading ? (
           <div className="py-12 flex justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-purple-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -98,4 +98,3 @@ export const AdminUsers = () => {
     </div>
   );
 };
-

@@ -16,7 +16,7 @@ export const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
       </div>
     );
   }
@@ -51,10 +51,10 @@ export const AdminDashboard = () => {
         <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/60 space-y-2">
           <div className="flex justify-between items-center text-slate-400">
             <span className="text-xs font-semibold">Total Transactions</span>
-            <CreditCard className="w-4 h-4 text-purple-400" />
+            <CreditCard className="w-4 h-4 text-orange-400" />
           </div>
           <div className="text-2xl font-black text-white">{stats?.total_transactions || 0}</div>
-          <span className="text-[10px] text-purple-400">Ledger entries</span>
+          <span className="text-[10px] text-orange-400">Ledger entries</span>
         </div>
 
         <div className="p-5 rounded-2xl bg-slate-800/80 border border-slate-700/60 space-y-2">
@@ -105,4 +105,3 @@ export const AdminDashboard = () => {
     </div>
   );
 };
-

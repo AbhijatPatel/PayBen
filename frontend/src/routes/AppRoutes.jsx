@@ -16,6 +16,7 @@ import { WaterBill } from '../pages/bills/WaterBill';
 import { GasBill } from '../pages/bills/GasBill';
 import { Transactions } from '../pages/transactions/Transactions';
 import { Profile } from '../pages/profile/Profile';
+import { SecuritySettings } from '../pages/profile/SecuritySettings';
 
 import { AdminLogin } from '../pages/admin/AdminLogin';
 import { AdminDashboard } from '../pages/admin/AdminDashboard';
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#1a73e8] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-[#102f6f] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -118,6 +119,14 @@ export const AppRoutes = () => {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="security"
+          element={
+            <ProtectedRoute>
+              <SecuritySettings />
             </ProtectedRoute>
           }
         />

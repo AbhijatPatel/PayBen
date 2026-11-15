@@ -9,8 +9,8 @@ import {
   Flame,
   Wallet,
   History,
+  Shield,
   User,
-  ShieldAlert,
   X
 } from 'lucide-react';
 
@@ -23,6 +23,7 @@ const navItems = [
   { name: 'Water Bill', path: '/bills/water', icon: Droplet },
   { name: 'Gas Bill', path: '/bills/gas', icon: Flame },
   { name: 'Transactions', path: '/transactions', icon: History },
+  { name: 'Security & Privacy', path: '/security', icon: Shield },
   { name: 'Profile', path: '/profile', icon: User },
 ];
 
@@ -70,7 +71,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-blue-50 text-[#1a73e8] shadow-sm'
+                      ? 'bg-blue-50 text-[#102f6f] shadow-sm'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }`
                 }
@@ -81,28 +82,10 @@ export const Sidebar = ({ isOpen, onClose }) => {
             );
           })}
 
-          <div className="pt-4 px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-gray-400 border-t border-gray-100 mt-4">
-            Management
-          </div>
-
-          <NavLink
-            to="/admin"
-            onClick={onClose}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                isActive
-                  ? 'bg-purple-50 text-purple-700 shadow-sm'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              }`
-            }
-          >
-            <ShieldAlert className="w-5 h-5 shrink-0 text-purple-600" />
-            <span>Admin Portal</span>
-          </NavLink>
         </div>
 
         {/* Bottom Helper / Footer info */}
-        <div className="p-3 border-t border-gray-100 bg-[#f8fafd]">
+        <div className="p-3 border-t border-gray-100 bg-[#f6f8fc]">
           <div className="flex items-center gap-2 p-2 rounded-xl bg-white border border-gray-200/60 shadow-xs">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
             <div className="text-[11px] text-gray-500">
@@ -115,4 +98,3 @@ export const Sidebar = ({ isOpen, onClose }) => {
     </>
   );
 };
-

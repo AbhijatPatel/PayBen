@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { Zap, User, Mail, Smartphone, Lock, Eye, EyeOff, Loader2, ArrowRight, Gift } from 'lucide-react';
+import { User, Mail, Smartphone, Lock, Eye, EyeOff, Loader2, ArrowRight, Gift } from 'lucide-react';
 
 export const Register = () => {
   const { register } = useAuth();
@@ -40,12 +40,12 @@ export const Register = () => {
     <div className="min-h-[80vh] flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-gray-200/80 p-8 space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#1a73e8] to-[#34a853] text-white flex items-center justify-center mx-auto shadow-md shadow-blue-500/20">
-            <Zap className="w-7 h-7 fill-current" />
-          </div>
-          <h2 className="text-2xl font-black text-gray-900 tracking-tight">
-            Create Pay<span className="text-[#1a73e8]">Ben</span> Account
-          </h2>
+          <img
+            src="/payben-logo.png"
+            alt="PayBen — Recharge, Pay, Simplify"
+            className="w-56 h-auto mx-auto mb-4"
+          />
+          <h2 className="text-2xl font-black text-gray-900 tracking-tight">Create your account</h2>
           <p className="text-xs text-gray-500">Sign up and get ₹500 instant wallet credit</p>
         </div>
 
@@ -65,7 +65,7 @@ export const Register = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Rahul Sharma"
-                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
               />
             </div>
           </div>
@@ -80,7 +80,7 @@ export const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="rahul@example.com"
-                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ export const Register = () => {
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
                 placeholder="9876543210"
-                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                className="w-full pl-10 pr-4 py-3 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
               />
             </div>
           </div>
@@ -112,7 +112,7 @@ export const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimum 6 characters"
-                className="w-full pl-10 pr-10 py-3 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                className="w-full pl-10 pr-10 py-3 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
               />
               <button
                 type="button"
@@ -127,7 +127,7 @@ export const Register = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-[#1a73e8] hover:bg-[#1557b0] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
+            className="w-full py-3.5 bg-[#102f6f] hover:bg-[#0b2450] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -143,7 +143,7 @@ export const Register = () => {
         <div className="text-center pt-2 border-t border-gray-100">
           <p className="text-xs text-gray-500">
             Already have an account?{' '}
-            <Link to="/login" className="font-bold text-[#1a73e8] hover:underline">
+            <Link to="/login" className="font-bold text-[#ff6500] hover:underline">
               Sign In
             </Link>
           </p>
@@ -152,4 +152,3 @@ export const Register = () => {
     </div>
   );
 };
-

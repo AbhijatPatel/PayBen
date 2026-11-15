@@ -21,10 +21,13 @@ export const Home = () => {
   return (
     <div className="space-y-12 pb-12">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] via-[#1e3a5f] to-[#1a73e8] text-white p-8 sm:p-12 shadow-xl">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#081a3a] via-[#102f6f] to-[#1b3e80] text-white p-8 sm:p-12 shadow-xl">
+        <div className="absolute -right-20 -top-24 h-80 w-80 rounded-full border border-orange-400/20" aria-hidden="true" />
+        <div className="absolute -right-10 -top-14 h-60 w-60 rounded-full border border-orange-400/15" aria-hidden="true" />
+        <div className="absolute right-16 top-16 h-3 w-3 rounded-full bg-[#ff6500] shadow-[0_0_30px_8px_rgba(255,101,0,0.25)]" aria-hidden="true" />
         <div className="relative z-10 max-w-2xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold text-blue-200 border border-white/15">
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <Sparkles className="w-4 h-4 text-orange-400" />
             <span>Next-Gen Smart UPI & Utility Payments</span>
           </div>
 
@@ -49,7 +52,7 @@ export const Home = () => {
               <>
                 <Link
                   to="/register"
-                  className="inline-flex items-center gap-2 bg-[#34a853] hover:bg-emerald-600 text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-emerald-500/20 transition"
+                  className="inline-flex items-center gap-2 bg-[#ff6500] hover:bg-[#e85b00] text-white font-bold px-6 py-3.5 rounded-2xl shadow-lg shadow-orange-500/20 transition"
                 >
                   <span>Create Free Account</span>
                   <ArrowRight className="w-4 h-4" />
@@ -78,7 +81,7 @@ export const Home = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
             { name: 'Mobile Recharge', path: '/recharge/mobile', icon: Smartphone, color: 'text-blue-600', bg: 'bg-blue-50' },
-            { name: 'DTH Recharge', path: '/recharge/dth', icon: Tv, color: 'text-purple-600', bg: 'bg-purple-50' },
+            { name: 'DTH Recharge', path: '/recharge/dth', icon: Tv, color: 'text-blue-700', bg: 'bg-blue-50' },
             { name: 'Electricity Bill', path: '/bills/electricity', icon: Zap, color: 'text-amber-500', bg: 'bg-amber-50' },
             { name: 'Water Bill', path: '/bills/water', icon: Droplet, color: 'text-cyan-600', bg: 'bg-cyan-50' },
             { name: 'Gas Cylinder/Piped', path: '/bills/gas', icon: Flame, color: 'text-red-500', bg: 'bg-red-50' },
@@ -116,7 +119,7 @@ export const Home = () => {
         </div>
 
         <div className="p-6 bg-white rounded-3xl border border-gray-100 shadow-sm flex items-start gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#1a73e8] flex items-center justify-center shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#102f6f] flex items-center justify-center shrink-0">
             <RefreshCw className="w-6 h-6" />
           </div>
           <div>
@@ -142,4 +145,3 @@ export const Home = () => {
     </div>
   );
 };
-

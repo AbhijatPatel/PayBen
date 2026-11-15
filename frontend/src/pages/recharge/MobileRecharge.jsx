@@ -90,7 +90,7 @@ export const MobileRecharge = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#1a73e8] flex items-center justify-center">
+        <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#102f6f] flex items-center justify-center">
           <Smartphone className="w-5 h-5" />
         </div>
         <div>
@@ -130,7 +130,7 @@ export const MobileRecharge = () => {
 
           <button
             onClick={() => { setReceipt(null); setMobile(''); setAmount(''); setSelectedPlan(null); }}
-            className="w-full py-3 bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold rounded-2xl transition"
+            className="w-full py-3 bg-[#102f6f] hover:bg-[#0b2450] text-white font-bold rounded-2xl transition"
           >
             Recharge Another Number
           </button>
@@ -153,7 +153,7 @@ export const MobileRecharge = () => {
                     value={mobile}
                     onChange={(e) => setMobile(e.target.value.replace(/\D/g, ''))}
                     placeholder="9876543210"
-                    className="w-full pl-12 pr-4 py-2.5 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
+                    className="w-full pl-12 pr-4 py-2.5 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium"
                   />
                 </div>
               </div>
@@ -163,7 +163,7 @@ export const MobileRecharge = () => {
                 <select
                   value={selectedOperator}
                   onChange={(e) => setSelectedOperator(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium bg-white"
+                  className="w-full px-3 py-2.5 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium bg-white"
                 >
                   {operators.map((op) => (
                     <option key={op.id} value={op.id}>{op.name}</option>
@@ -190,14 +190,14 @@ export const MobileRecharge = () => {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="Select or enter amount"
-                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-gray-200 focus:border-[#1a73e8] focus:ring-2 focus:ring-blue-100 outline-none text-lg font-bold text-gray-900"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-gray-200 focus:border-[#102f6f] focus:ring-2 focus:ring-blue-100 outline-none text-lg font-bold text-gray-900"
                   />
                 </div>
               </div>
 
               {selectedPlan && (
                 <div className="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs space-y-1">
-                  <div className="font-bold text-[#1a73e8]">{selectedPlan.plan_name}</div>
+                  <div className="font-bold text-[#102f6f]">{selectedPlan.plan_name}</div>
                   <div className="text-gray-600">{selectedPlan.description}</div>
                   <div className="text-gray-400">Validity: {selectedPlan.validity} • Data: {selectedPlan.data_limit}</div>
                 </div>
@@ -206,7 +206,7 @@ export const MobileRecharge = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-[#1a73e8] hover:bg-[#1557b0] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
+                className="w-full py-3.5 bg-[#102f6f] hover:bg-[#0b2450] disabled:bg-blue-300 text-white font-bold rounded-2xl flex items-center justify-center gap-2 transition shadow-md shadow-blue-500/20"
               >
                 {loading ? (
                   <>
@@ -232,7 +232,7 @@ export const MobileRecharge = () => {
 
             {plansLoading ? (
               <div className="py-12 flex justify-center">
-                <Loader2 className="w-6 h-6 animate-spin text-[#1a73e8]" />
+                <Loader2 className="w-6 h-6 animate-spin text-[#102f6f]" />
               </div>
             ) : plans.length > 0 ? (
               <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
@@ -242,7 +242,7 @@ export const MobileRecharge = () => {
                     onClick={() => handleSelectPlan(p)}
                     className={`p-4 rounded-2xl border cursor-pointer transition-all flex items-center justify-between gap-4 ${
                       selectedPlan?.id === p.id
-                        ? 'border-[#1a73e8] bg-blue-50/40 ring-2 ring-blue-100'
+                        ? 'border-[#102f6f] bg-blue-50/40 ring-2 ring-blue-100'
                         : 'border-gray-100 hover:border-blue-200 hover:bg-gray-50/50'
                     }`}
                   >
@@ -261,7 +261,7 @@ export const MobileRecharge = () => {
 
                     <button
                       type="button"
-                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-[#1a73e8] hover:bg-[#1a73e8] hover:text-white transition"
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-gray-200 text-[#102f6f] hover:bg-[#102f6f] hover:text-white transition"
                     >
                       Select
                     </button>

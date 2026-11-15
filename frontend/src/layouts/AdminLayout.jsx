@@ -1,7 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom';
 import {
-  ShieldCheck,
   LayoutDashboard,
   Users,
   CreditCard,
@@ -22,12 +21,10 @@ export const AdminLayout = () => {
       {/* Admin Header */}
       <header className="bg-slate-800/90 border-b border-slate-700/60 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center text-white">
-            <ShieldCheck className="w-5 h-5" />
-          </div>
+          <img src="/payben-mark.png" alt="" className="w-8 h-8 rounded-lg bg-white p-0.5 object-contain" />
           <div>
             <h1 className="font-bold text-base leading-tight">PayBen Admin Portal</h1>
-            <span className="text-[10px] text-purple-400 font-mono">Platform Oversight & Management</span>
+            <span className="text-[10px] text-orange-400 font-mono">Platform Oversight & Management</span>
           </div>
         </div>
 
@@ -56,7 +53,7 @@ export const AdminLayout = () => {
             to="/admin/dashboard"
             className={({ isActive }) =>
               `flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold transition ${
-                isActive ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                isActive ? 'bg-[#ff6500] text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
               }`
             }
           >
@@ -68,7 +65,7 @@ export const AdminLayout = () => {
             to="/admin/users"
             className={({ isActive }) =>
               `flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold transition ${
-                isActive ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                isActive ? 'bg-[#ff6500] text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
               }`
             }
           >
@@ -80,7 +77,7 @@ export const AdminLayout = () => {
             to="/admin/transactions"
             className={({ isActive }) =>
               `flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold transition ${
-                isActive ? 'bg-purple-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                isActive ? 'bg-[#ff6500] text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
               }`
             }
           >
@@ -97,4 +94,3 @@ export const AdminLayout = () => {
     </div>
   );
 };
-

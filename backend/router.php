@@ -26,3 +26,4 @@ if (file_exists(__DIR__ . '/index.php')) {
 }
 
 return false;
+
