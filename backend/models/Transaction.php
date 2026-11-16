@@ -43,16 +43,37 @@ class Transaction {
             SELECT 
                 COUNT(*) AS total_count,
                 COALESCE(SUM(CASE WHEN status = 'SUCCESS' THEN 1 ELSE 0 END), 0) AS success_count,
-                COALESCE(SUM(CASE WHEN status = 'SUCCESS' THEN amount ELSE 0 END), 0.00) AS total_spent
+                COALESCE(SUM(CASE WHEN status = 'SUCCESS' AND type != 'wallet_topup' THEN amount ELSE 0 END), 0.00) AS total_spent,
+                COALESCE(SUM(CASE WHEN status = 'SUCCESS' AND type = 'wallet_topup' THEN amount ELSE 0 END), 0.00) AS total_received
             FROM transactions 
             WHERE user_id = ?
         ");
         $stmt->execute([$userId]);
         $stats = $stmt->fetch();
+
+        // 6-Month Spending Trends for Analytics Chart
+        $monthlyStmt = $pdo->prepare("
+            SELECT 
+                DATE_FORMAT(created_at, '%b') AS month_label,
+                DATE_FORMAT(created_at, '%Y-%m') AS month_key,
+                COALESCE(SUM(amount), 0.00) AS total
+            FROM transactions
+            WHERE user_id = ? 
+              AND status = 'SUCCESS' 
+              AND type != 'wallet_topup'
+              AND created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+            GROUP BY month_key, month_label
+            ORDER BY month_key ASC
+        ");
+        $monthlyStmt->execute([$userId]);
+        $monthlyData = $monthlyStmt->fetchAll();
+
         return [
             'total_transactions' => (int)($stats['total_count'] ?? 0),
             'successful_transactions' => (int)($stats['success_count'] ?? 0),
-            'total_spent' => (float)($stats['total_spent'] ?? 0.00)
+            'total_spent' => (float)($stats['total_spent'] ?? 0.00),
+            'total_received' => (float)($stats['total_received'] ?? 0.00),
+            'monthly_spending' => $monthlyData ?: []
         ];
     }
 }
