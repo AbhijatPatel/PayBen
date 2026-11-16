@@ -33,8 +33,8 @@ class AuthController {
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_mobile'] = $user['mobile'];
 
-        // Token for React headers
-        $token = base64_encode($user['id'] . ':' . md5($user['password_hash']));
+        // Token for React headers (HMAC Signed)
+        $token = generateAuthToken((int)$user['id']);
 
         jsonResponse([
             'success' => true,
@@ -94,7 +94,7 @@ class AuthController {
             $_SESSION['user_email'] = $email;
             $_SESSION['user_mobile'] = $mobile;
 
-            $token = base64_encode($userId . ':' . md5($password));
+            $token = generateAuthToken((int)$userId);
 
             jsonResponse([
                 'success' => true,

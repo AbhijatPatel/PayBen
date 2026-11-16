@@ -4,6 +4,8 @@ require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/middleware/auth.php';
 require_once dirname(__DIR__) . '/models/Wallet.php';
 require_once dirname(__DIR__) . '/models/User.php';
+require_once dirname(__DIR__) . '/services/FraudDetectionService.php';
+require_once dirname(__DIR__) . '/services/NotificationService.php';
 
 class WalletController {
     public static function getBalance() {
@@ -53,6 +55,15 @@ class WalletController {
 
         if (!$recipient) {
             jsonResponse(['success' => false, 'message' => 'Recipient not found on PayBen network. Check mobile or email.'], 404);
+        }
+
+        // Rule-based Fraud Risk Check
+        $fraud = FraudDetectionService::evaluateTransactionRisk((int)$user['id'], $amount, 'transfer', $recipientClean);
+        if (!$fraud['is_allowed']) {
+            jsonResponse([
+                'success' => false, 
+                'message' => 'Transaction declined by security engine: ' . implode('; ', $fraud['triggered_rules'])
+            ], 403);
         }
 
         try {

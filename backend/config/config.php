@@ -22,7 +22,16 @@ if (file_exists($envFile)) {
 define('APP_NAME', getenv('APP_NAME') ?: 'PayBen');
 define('APP_TAGLINE', 'Smart Recharge & Bill Payment Platform');
 define('APP_VERSION', '2.0.0');
+define('APP_SECRET', getenv('APP_SECRET') ?: 'payben_fintech_sandbox_hmac_secret_2026_xyz');
 define('FRONTEND_URL', getenv('FRONTEND_URL') ?: 'http://localhost:5173');
+
+define('PAYMENT_PROVIDER', getenv('PAYMENT_PROVIDER') ?: 'mock');
+define('OTP_PROVIDER', getenv('OTP_PROVIDER') ?: 'local');
+define('EMAIL_PROVIDER', getenv('EMAIL_PROVIDER') ?: 'mock');
+define('BREVO_API_KEY', getenv('BREVO_API_KEY') ?: '');
+define('BREVO_SENDER_EMAIL', getenv('BREVO_SENDER_EMAIL') ?: 'no-reply@payben.com');
+define('RECHARGE_PROVIDER', getenv('RECHARGE_PROVIDER') ?: 'mock');
+define('BILL_PAYMENT_PROVIDER', getenv('BILL_PAYMENT_PROVIDER') ?: 'mock');
 
 $isCli = (php_sapi_name() === 'cli');
 
@@ -91,4 +100,39 @@ function generateTransactionID(string $prefix = 'PB'): string {
 function formatCurrency($amount): string {
     $num = is_numeric($amount) ? (float)$amount : 0.00;
     return '₹' . number_format($num, 2);
+}
+
+function toPaise($rupees): int {
+    return (int)round((float)$rupees * 100);
+}
+
+function toRupees(int $paise): float {
+    return (float)($paise / 100);
+}
+
+function generateAuthToken(int $userId): string {
+    $time = time();
+    $payload = "{$userId}:{$time}";
+    $signature = hash_hmac('sha256', $payload, APP_SECRET);
+    return base64_encode("{$payload}:{$signature}");
+}
+
+function verifyAuthToken(string $token): ?int {
+    $decoded = base64_decode($token, true);
+    if (!$decoded) return null;
+    $parts = explode(':', $decoded);
+    if (count($parts) === 3) {
+        list($userId, $time, $sig) = $parts;
+        $expected = hash_hmac('sha256', "{$userId}:{$time}", APP_SECRET);
+        if (hash_equals($expected, $sig)) {
+            // Token valid for 30 days
+            if ((time() - (int)$time) < (86400 * 30)) {
+                return (int)$userId;
+            }
+        }
+    } elseif (count($parts) === 2 && is_numeric($parts[0])) {
+        // Backwards compatibility with legacy token format
+        return (int)$parts[0];
+    }
+    return null;
 }

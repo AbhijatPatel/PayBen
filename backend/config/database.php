@@ -104,6 +104,16 @@ function getDBConnection(): PDO {
                 }
             }
 
+            // Auto-apply fintech sandbox migration if wallet_ledger table missing
+            try {
+                $pdo->query("SELECT 1 FROM wallet_ledger LIMIT 1");
+            } catch (\Throwable $tb) {
+                $migFile = dirname(__DIR__) . '/database/migrations/001_fintech_sandbox_upgrade.sql';
+                if (file_exists($migFile)) {
+                    $pdo->exec(file_get_contents($migFile));
+                }
+            }
+
             return $pdo;
         } catch (PDOException $e) {
             $lastError = $e;

@@ -33,6 +33,16 @@ export const authService = {
     } finally {
       localStorage.removeItem('payben_token');
     }
+  },
+
+  async sendOtp(identifier, purpose = 'LOGIN') {
+    const res = await api.post('/auth/send-otp.php', { identifier, purpose });
+    return res.data;
+  },
+
+  async verifyOtp(identifier, otp, purpose = 'LOGIN') {
+    const res = await api.post('/auth/verify-otp.php', { identifier, otp, purpose });
+    return res.data;
   }
 };
 

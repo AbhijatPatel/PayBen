@@ -43,15 +43,25 @@ class Operator {
             $opName = $op['name'] ?? 'Telecom';
 
             $newBalance = (float)$wallet['balance'] - $amount;
+            $newPaise = toPaise($newBalance);
+            $amountPaise = toPaise($amount);
             $prefix = ($type === 'mobile_recharge') ? 'MR' : 'DTH';
             $txId = generateTransactionID($prefix);
 
             // Deduct wallet
-            $stmtUp = $pdo->prepare("UPDATE wallets SET balance = ?, updated_at = NOW() WHERE id = ?");
-            $stmtUp->execute([$newBalance, $wallet['id']]);
+            $stmtUp = $pdo->prepare("UPDATE wallets SET balance = ?, balance_paise = ?, updated_at = NOW() WHERE id = ?");
+            $stmtUp->execute([$newBalance, $newPaise, $wallet['id']]);
 
-            // Ledger
+            // Double-entry ledger
             $desc = ucfirst(str_replace('_', ' ', $type)) . " for {$targetNumber} ({$opName})";
+            try {
+                $stmtLedgerV2 = $pdo->prepare("
+                    INSERT INTO wallet_ledger (transaction_id, wallet_id, user_id, entry_type, category, amount_paise, balance_after_paise, description, created_at)
+                    VALUES (?, ?, ?, 'DEBIT', 'RECHARGE', ?, ?, ?, NOW())
+                ");
+                $stmtLedgerV2->execute([$txId, $wallet['id'], $userId, $amountPaise, $newPaise, $desc]);
+            } catch (\Throwable $tb) {}
+
             $stmtLedger = $pdo->prepare("
                 INSERT INTO wallet_transactions (user_id, wallet_id, type, amount, description, reference_id, balance_after, created_at)
                 VALUES (?, ?, 'debit', ?, ?, ?, ?, NOW())

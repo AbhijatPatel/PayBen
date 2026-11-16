@@ -24,6 +24,11 @@ export const adminService = {
   async getTransactions(limit = 50, offset = 0) {
     const res = await api.get(`/admin/transactions.php?limit=${limit}&offset=${offset}`);
     return res.data;
+  },
+
+  async getFraudAlerts(limit = 50, offset = 0) {
+    const res = await api.get(`/admin/fraud-alerts.php?limit=${limit}&offset=${offset}`);
+    return res.data;
   }
 };
 

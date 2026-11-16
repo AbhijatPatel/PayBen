@@ -28,10 +28,20 @@ class Wallet {
 
             $walletId = (int)$wallet['id'];
             $newBalance = (float)$wallet['balance'] + $amount;
+            $newPaise = toPaise($newBalance);
+            $amountPaise = toPaise($amount);
             $txId = generateTransactionID('WT');
 
-            $stmtUp = $pdo->prepare("UPDATE wallets SET balance = ?, updated_at = NOW() WHERE id = ?");
-            $stmtUp->execute([$newBalance, $walletId]);
+            $stmtUp = $pdo->prepare("UPDATE wallets SET balance = ?, balance_paise = ?, updated_at = NOW() WHERE id = ?");
+            $stmtUp->execute([$newBalance, $newPaise, $walletId]);
+
+            try {
+                $stmtLedgerV2 = $pdo->prepare("
+                    INSERT INTO wallet_ledger (transaction_id, wallet_id, user_id, entry_type, category, amount_paise, balance_after_paise, description, created_at)
+                    VALUES (?, ?, ?, 'CREDIT', 'TOPUP', ?, ?, ?, NOW())
+                ");
+                $stmtLedgerV2->execute([$txId, $walletId, $userId, $amountPaise, $newPaise, "Added money via {$paymentMethod}"]);
+            } catch (\Throwable $tb) {}
 
             $stmtLedger = $pdo->prepare("
                 INSERT INTO wallet_transactions (user_id, wallet_id, type, amount, description, reference_id, balance_after, created_at)
@@ -103,15 +113,35 @@ class Wallet {
 
             $senderNewBal = (float)$senderWallet['balance'] - $amount;
             $receiverNewBal = (float)$receiverWallet['balance'] + $amount;
+            $senderPaise = toPaise($senderNewBal);
+            $receiverPaise = toPaise($receiverNewBal);
+            $amountPaise = toPaise($amount);
             $txId = generateTransactionID('UPI');
 
             // Update sender
-            $stmtUpS = $pdo->prepare("UPDATE wallets SET balance = ?, updated_at = NOW() WHERE id = ?");
-            $stmtUpS->execute([$senderNewBal, $senderWallet['id']]);
+            $stmtUpS = $pdo->prepare("UPDATE wallets SET balance = ?, balance_paise = ?, updated_at = NOW() WHERE id = ?");
+            $stmtUpS->execute([$senderNewBal, $senderPaise, $senderWallet['id']]);
 
             // Update receiver
-            $stmtUpR = $pdo->prepare("UPDATE wallets SET balance = ?, updated_at = NOW() WHERE id = ?");
-            $stmtUpR->execute([$receiverNewBal, $receiverWallet['id']]);
+            $stmtUpR = $pdo->prepare("UPDATE wallets SET balance = ?, balance_paise = ?, updated_at = NOW() WHERE id = ?");
+            $stmtUpR->execute([$receiverNewBal, $receiverPaise, $receiverWallet['id']]);
+
+            $descSender = "Sent to " . ($receiver['full_name'] ?? 'User') . ($note ? " ({$note})" : "");
+            $descReceiver = "Received from " . ($sender['full_name'] ?? 'User') . ($note ? " ({$note})" : "");
+
+            try {
+                $stmtLedgerV2 = $pdo->prepare("
+                    INSERT INTO wallet_ledger (transaction_id, wallet_id, user_id, entry_type, category, amount_paise, balance_after_paise, counterparty_id, counterparty_vpa, description, created_at)
+                    VALUES (?, ?, ?, 'DEBIT', 'TRANSFER_SENT', ?, ?, ?, ?, ?, NOW())
+                ");
+                $stmtLedgerV2->execute([$txId, $senderWallet['id'], $senderId, $amountPaise, $senderPaise, $receiverId, ($receiver['mobile'] ?? '') . '@payben', $descSender]);
+
+                $stmtLedgerV2R = $pdo->prepare("
+                    INSERT INTO wallet_ledger (transaction_id, wallet_id, user_id, entry_type, category, amount_paise, balance_after_paise, counterparty_id, counterparty_vpa, description, created_at)
+                    VALUES (?, ?, ?, 'CREDIT', 'TRANSFER_RECEIVED', ?, ?, ?, ?, ?, NOW())
+                ");
+                $stmtLedgerV2R->execute([$txId, $receiverWallet['id'], $receiverId, $amountPaise, $receiverPaise, $senderId, ($sender['mobile'] ?? '') . '@payben', $descReceiver]);
+            } catch (\Throwable $tb) {}
 
             // Sender ledger entry
             $descSender = "Sent to " . ($receiver['full_name'] ?? 'User') . ($note ? " ({$note})" : "");
@@ -162,10 +192,20 @@ class Wallet {
             // Cashback between ₹5 and ₹50
             $cashback = (float)mt_rand(5, 50);
             $newBalance = (float)$wallet['balance'] + $cashback;
+            $newPaise = toPaise($newBalance);
+            $cashbackPaise = toPaise($cashback);
             $txId = generateTransactionID('SC');
 
-            $stmtUp = $pdo->prepare("UPDATE wallets SET balance = ?, updated_at = NOW() WHERE id = ?");
-            $stmtUp->execute([$newBalance, $wallet['id']]);
+            $stmtUp = $pdo->prepare("UPDATE wallets SET balance = ?, balance_paise = ?, updated_at = NOW() WHERE id = ?");
+            $stmtUp->execute([$newBalance, $newPaise, $wallet['id']]);
+
+            try {
+                $stmtLedgerV2 = $pdo->prepare("
+                    INSERT INTO wallet_ledger (transaction_id, wallet_id, user_id, entry_type, category, amount_paise, balance_after_paise, description, created_at)
+                    VALUES (?, ?, ?, 'CREDIT', 'CASHBACK', ?, ?, 'PayBen Scratch Card Reward', NOW())
+                ");
+                $stmtLedgerV2->execute([$txId, $wallet['id'], $userId, $cashbackPaise, $newPaise]);
+            } catch (\Throwable $tb) {}
 
             $stmtLedger = $pdo->prepare("
                 INSERT INTO wallet_transactions (user_id, wallet_id, type, amount, description, reference_id, balance_after, created_at)

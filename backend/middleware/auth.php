@@ -6,16 +6,15 @@ function getAuthUser(): ?array {
     // Check PHP session first
     $userId = $_SESSION['user_id'] ?? null;
 
-    // Also support Bearer token (base64 userId:hash or session ID)
+    // Also support Bearer token (secure HMAC token or legacy)
     if (!$userId) {
-        $headers = getallheaders();
-        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? '';
+        $headers = function_exists('getallheaders') ? getallheaders() : [];
+        $authHeader = $headers['Authorization'] ?? $headers['authorization'] ?? ($_SERVER['HTTP_AUTHORIZATION'] ?? '');
         if (preg_match('/Bearer\s+(\S+)/i', $authHeader, $matches)) {
             $token = $matches[1];
-            // Decode payload or check session
-            $parts = explode(':', base64_decode($token));
-            if (count($parts) === 2 && is_numeric($parts[0])) {
-                $userId = (int)$parts[0];
+            $verifiedId = verifyAuthToken($token);
+            if ($verifiedId !== null) {
+                $userId = $verifiedId;
             }
         }
     }

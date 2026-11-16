@@ -236,15 +236,24 @@ All API responses follow the uniform JSON envelope:
 
 | Domain | Method | Endpoint | Description |
 | :--- | :---: | :--- | :--- |
-| **Auth** | `POST` | `/api/auth/login.php` | Authenticates user & issues session token |
+| **Auth** | `POST` | `/api/auth/login.php` | Authenticates user & issues HMAC-signed token |
 | **Auth** | `POST` | `/api/auth/register.php` | Creates user account & funds ₹500 bonus |
+| **Auth** | `POST` | `/api/auth/send-otp.php` | Issues secure 6-digit OTP challenge (Free Sandbox / Local) |
+| **Auth** | `POST` | `/api/auth/verify-otp.php` | Validates OTP code with cooldown & attempt limits |
 | **Auth** | `GET` | `/api/auth/me.php` | Fetches active session profile & balance |
 | **Auth** | `POST` | `/api/auth/logout.php` | Terminates active session |
-| **Wallet** | `GET` | `/api/wallet/balance.php` | Retrieves current balance & UPI ID |
-| **Wallet** | `POST` | `/api/wallet/add-money.php` | Simulates instant wallet top-up |
-| **Wallet** | `POST` | `/api/wallet/transfer.php` | Executes atomic P2P transfer |
-| **Wallet** | `POST` | `/api/wallet/scratch-card.php` | Awards random cashback (₹5–₹50) |
-| **Wallet** | `GET` | `/api/wallet/history.php` | Paginated double-entry ledger |
+| **Wallet** | `GET` | `/api/wallet/balance.php` | Retrieves current balance (paise & rupees) |
+| **Wallet** | `GET` | `/api/wallet/statement.php` | Paginated immutable double-entry ledger |
+| **Wallet** | `POST` | `/api/wallet/add-money.php` | Instant wallet top-up via sandbox gateway |
+| **Wallet** | `POST` | `/api/wallet/transfer.php` | Atomic P2P transfer with deadlock & fraud check |
+| **Wallet** | `POST` | `/api/wallet/scratch-card.php` | Awards random cashback (₹5–₹50) via ledger |
+| **Wallet** | `GET` | `/api/wallet/history.php` | Paginated transaction history |
+| **Payments** | `POST` | `/api/payments/create-order.php` | Creates sandbox checkout order |
+| **Payments** | `POST` | `/api/payments/verify-payment.php` | Simulates payment success, failure, or cancellation |
+| **Payments** | `GET` | `/api/payments/status.php` | Order verification & status polling |
+| **Notifications**| `GET` | `/api/notifications/list.php` | In-app notification center |
+| **Notifications**| `POST`| `/api/notifications/read.php` | Marks notifications as read |
+| **Fraud** | `POST` | `/api/fraud/check.php` | Rule-based fraud risk scoring (0-100) |
 | **Recharge** | `GET` | `/api/recharge/operators.php` | Lists active telecom / DTH providers |
 | **Recharge** | `GET` | `/api/recharge/plans.php?operator_id=X` | Lists tariff plans for operator |
 | **Recharge** | `POST` | `/api/recharge/mobile.php` | Deducts wallet & recharges phone |
@@ -255,9 +264,26 @@ All API responses follow the uniform JSON envelope:
 | **Transactions** | `GET` | `/api/transactions/list.php` | Filterable statements log |
 | **Transactions** | `GET` | `/api/transactions/details.php?id=X` | Single transaction receipt details |
 | **Admin** | `POST` | `/api/admin/login.php` | Administrator authentication |
-| **Admin** | `GET` | `/api/admin/dashboard.php` | Platform volume & reserve metrics |
+| **Admin** | `GET` | `/api/admin/dashboard.php` | Platform volume & provider matrix |
+| **Admin** | `GET` | `/api/admin/fraud-alerts.php` | Live fraud detection inspection stream |
 | **Admin** | `GET` | `/api/admin/users.php` | User directory with status toggling |
 | **Admin** | `GET` | `/api/admin/transactions.php` | System-wide transaction audit log |
+
+---
+
+## 🛡️ Zero Paid Services & Sandbox Strategy
+
+PayBen operates with **100% free and open-source technologies**. No paid subscriptions or credit card registrations are ever required:
+
+| Service Area | Free Sandbox Implementation | Production / Optional Integration |
+| :--- | :--- | :--- |
+| **Payment Checkout** | Built-in `MockPaymentProvider` simulating checkout, success, failure & cancellation | Optional Razorpay Test Mode with test keys |
+| **OTP Verification** | `LocalOtpProvider` with bcrypt-hashed challenges, 60s cooldown, and dev transparency | Optional Brevo Free Plan for email OTP |
+| **Email Service** | `MockEmailProvider` local logging + in-app notification center | Brevo Free Plan (300 emails/day) via cURL |
+| **Mobile & DTH** | Local tariff catalog with Jio, Airtel, Vi, BSNL, Tata Play, Sun Direct | Local database-driven sandbox catalog |
+| **BBPS Utility Bills** | Local mock BBPS provider for Electricity, Water, Piped Gas with dynamic consumer lookups | Local database-driven sandbox bills |
+| **Fraud Engine** | Self-developed explainable rule-based engine (velocity, rapid duplicates, high amount) | Zero third-party or paid AI API dependencies |
+| **Currency Math** | Integer paise math using `BIGINT` (`balance_paise`) to prevent floating point inaccuracies | Strict integer arithmetic |
 
 ---
 

@@ -17,7 +17,14 @@ class Admin {
         $usersCount = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
         $totalVol = (float)$pdo->query("SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE status = 'SUCCESS'")->fetchColumn();
         $txCount = (int)$pdo->query("SELECT COUNT(*) FROM transactions")->fetchColumn();
+        $successTx = (int)$pdo->query("SELECT COUNT(*) FROM transactions WHERE status = 'SUCCESS'")->fetchColumn();
+        $failedTx = (int)$pdo->query("SELECT COUNT(*) FROM transactions WHERE status = 'FAILED'")->fetchColumn();
         $walletHolding = (float)$pdo->query("SELECT COALESCE(SUM(balance), 0) FROM wallets")->fetchColumn();
+        
+        $fraudAlertsCount = 0;
+        try {
+            $fraudAlertsCount = (int)$pdo->query("SELECT COUNT(*) FROM fraud_alerts WHERE status = 'PENDING'")->fetchColumn();
+        } catch (\Throwable $tb) {}
 
         $recentTx = $pdo->query("
             SELECT t.*, u.full_name, u.email
@@ -30,8 +37,18 @@ class Admin {
             'total_users' => $usersCount,
             'total_volume' => $totalVol,
             'total_transactions' => $txCount,
+            'successful_transactions' => $successTx,
+            'failed_transactions' => $failedTx,
             'wallet_holdings' => $walletHolding,
-            'recent_transactions' => $recentTx
+            'fraud_alerts_count' => $fraudAlertsCount,
+            'recent_transactions' => $recentTx,
+            'sandbox_providers' => [
+                'payment' => PAYMENT_PROVIDER,
+                'otp' => OTP_PROVIDER,
+                'email' => EMAIL_PROVIDER,
+                'recharge' => RECHARGE_PROVIDER,
+                'bills' => BILL_PAYMENT_PROVIDER
+            ]
         ];
     }
 

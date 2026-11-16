@@ -24,6 +24,11 @@ export const walletService = {
   async getHistory(limit = 20, offset = 0) {
     const res = await api.get(`/wallet/history.php?limit=${limit}&offset=${offset}`);
     return res.data;
+  },
+
+  async getStatement(limit = 50, offset = 0) {
+    const res = await api.get(`/wallet/statement.php?limit=${limit}&offset=${offset}`);
+    return res.data;
   }
 };
 
