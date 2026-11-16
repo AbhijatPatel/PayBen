@@ -21,7 +21,7 @@ export const AdminLayout = () => {
       {/* Admin Header */}
       <header className="bg-slate-800/90 border-b border-slate-700/60 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="/payben-mark.png" alt="" className="w-8 h-8 rounded-lg bg-white p-0.5 object-contain" />
+          <img src="/payben-app-icon.svg" alt="PayBen" className="w-8 h-8 rounded-lg shadow-sm" />
           <div>
             <h1 className="font-bold text-base leading-tight">PayBen Admin Portal</h1>
             <span className="text-[10px] text-orange-400 font-mono">Platform Oversight & Management</span>

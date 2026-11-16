@@ -41,8 +41,8 @@ export const Register = () => {
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-gray-200/80 p-8 space-y-6">
         <div className="text-center space-y-2">
           <img
-            src="/payben-logo.png"
-            alt="PayBen — Recharge, Pay, Simplify"
+            src="/payben-logo.svg"
+            alt="PayBen — Payments Made Simple."
             className="w-56 h-auto mx-auto mb-4"
           />
           <h2 className="text-2xl font-black text-gray-900 tracking-tight">Create your account</h2>

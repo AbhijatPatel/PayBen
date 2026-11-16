@@ -34,7 +34,7 @@ export const AdminLogin = () => {
         <div className="text-center space-y-3">
           <div className="p-3 bg-white/5 rounded-2xl inline-block border border-white/10 shadow-md">
             <img
-              src="/payben-logo.png"
+              src="/payben-logo-dark.svg"
               alt="PayBen"
               className="h-10 w-auto mx-auto object-contain"
             />

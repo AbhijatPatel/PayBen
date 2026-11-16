@@ -61,7 +61,7 @@ export const QrModal = ({ isOpen, onClose }) => {
         <div className="p-4 bg-gradient-to-b from-blue-50/80 via-white to-orange-50/40 rounded-2xl border border-blue-100 shadow-inner flex flex-col items-center relative overflow-hidden">
           {/* PayBen Brand Header */}
           <img
-            src="/payben-logo.png"
+            src="/payben-logo.svg"
             alt="PayBen"
             className="h-8 w-auto mb-2 object-contain"
           />
@@ -78,8 +78,8 @@ export const QrModal = ({ isOpen, onClose }) => {
             />
             {/* Center Logo Watermark */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-9 h-9 rounded-xl bg-white p-1 shadow-md border border-gray-100 flex items-center justify-center">
-                <img src="/payben-logo.png" alt="" className="w-full h-auto object-contain" />
+              <div className="w-9 h-9 rounded-xl bg-white p-0.5 shadow-md border border-gray-100 flex items-center justify-center">
+                <img src="/payben-app-icon.svg" alt="" className="w-full h-full object-contain rounded-lg" />
               </div>
             </div>
           </div>

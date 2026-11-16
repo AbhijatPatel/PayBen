@@ -134,7 +134,7 @@ export const Dashboard = () => {
           <div className="relative z-10 flex items-center justify-between mb-4">
             <div className="bg-white/95 px-3 py-1 rounded-xl shadow-md">
               <img
-                src="/payben-logo.png"
+                src="/payben-logo.svg"
                 alt="PayBen"
                 className="h-6 w-auto object-contain"
               />

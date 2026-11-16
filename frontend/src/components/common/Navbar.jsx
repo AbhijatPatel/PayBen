@@ -52,7 +52,7 @@ export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenM
 
           <Link to="/" className="flex items-center gap-2 group text-decoration-none">
             <img
-              src="/payben-logo.png"
+              src="/payben-logo.svg"
               alt="PayBen"
               className="h-10 w-auto object-contain transition-transform group-hover:scale-[1.02]"
             />

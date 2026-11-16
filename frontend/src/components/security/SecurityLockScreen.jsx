@@ -248,9 +248,9 @@ export const SecurityLockScreen = () => {
         {/* PayBen Official Logo */}
         <div className="mb-4 text-center">
           <img
-            src="/payben-logo.png"
+            src="/payben-logo-dark.svg"
             alt="PayBen"
-            className="w-44 h-auto mx-auto drop-shadow-[0_10px_25px_rgba(0,71,204,0.4)]"
+            className="w-44 h-auto mx-auto drop-shadow-[0_10px_25px_rgba(53,214,176,0.3)]"
           />
         </div>
 
