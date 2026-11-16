@@ -1,6 +1,7 @@
 import React from 'react';
 import { HeroSection } from '../components/common/HeroSection';
 import { PopularServices } from '../components/common/PopularServices';
+import { ExploreSuperApp } from '../components/common/ExploreSuperApp';
 import { FeatureCards } from '../components/common/FeatureCards';
 import { ShieldCheck, Cpu, Database, CheckCircle2 } from 'lucide-react';
 
@@ -10,8 +11,11 @@ export const Home = () => {
       {/* 1. Hero Section with Reduced Height & Animated P SVG */}
       <HeroSection isDashboard={false} />
 
-      {/* 2. Popular Services (Mobile, DTH, Electricity, Water, Gas) */}
+      {/* 2. Popular Services (Mobile, DTH, Electricity, Water, Gas, Broadband) */}
       <PopularServices />
+
+      {/* 2.5. Explore Everything — Super App Discovery Hub */}
+      <ExploreSuperApp />
 
       {/* 3. Feature Cards (Secure Wallet, Transparent Transactions, Rewards & Cashback) */}
       <FeatureCards />

@@ -9,6 +9,7 @@ import { soundService } from '../../services/soundService';
 
 import { HeroSection } from '../../components/common/HeroSection';
 import { PopularServices } from '../../components/common/PopularServices';
+import { ExploreSuperApp } from '../../components/common/ExploreSuperApp';
 import { FeatureCards } from '../../components/common/FeatureCards';
 import { WalletOverviewDeck } from '../../components/wallet/WalletOverviewDeck';
 import { SpendingAnalytics } from '../../components/analytics/SpendingAnalytics';
@@ -165,6 +166,9 @@ export const Dashboard = () => {
 
       {/* 4. POPULAR SERVICES GRID */}
       <PopularServices />
+
+      {/* 4.5. EXPLORE EVERYTHING — SUPER APP DIRECTORY */}
+      <ExploreSuperApp />
 
       {/* 5. FINTECH SUPER APP HUB */}
       <section className="bg-white rounded-3xl p-6 border border-gray-200/80 shadow-xs space-y-4">

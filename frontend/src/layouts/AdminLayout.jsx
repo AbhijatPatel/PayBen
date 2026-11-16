@@ -5,7 +5,9 @@ import {
   Users,
   CreditCard,
   LogOut,
-  ArrowLeft
+  ArrowLeft,
+  Briefcase,
+  ShoppingBag
 } from 'lucide-react';
 
 export const AdminLayout = () => {
@@ -83,6 +85,30 @@ export const AdminLayout = () => {
           >
             <CreditCard className="w-4 h-4" />
             Transactions
+          </NavLink>
+
+          <NavLink
+            to="/admin/bookings"
+            className={({ isActive }) =>
+              `flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                isActive ? 'bg-[#ff6500] text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+              }`
+            }
+          >
+            <Briefcase className="w-4 h-4" />
+            Bookings
+          </NavLink>
+
+          <NavLink
+            to="/admin/merchants"
+            className={({ isActive }) =>
+              `flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold transition ${
+                isActive ? 'bg-[#ff6500] text-white shadow-md' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+              }`
+            }
+          >
+            <ShoppingBag className="w-4 h-4" />
+            Merchants & Partners
           </NavLink>
         </aside>
 

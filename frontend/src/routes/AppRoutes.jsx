@@ -14,6 +14,7 @@ import { DthRecharge } from '../pages/recharge/DthRecharge';
 import { ElectricityBill } from '../pages/bills/ElectricityBill';
 import { WaterBill } from '../pages/bills/WaterBill';
 import { GasBill } from '../pages/bills/GasBill';
+import { BroadbandBill } from '../pages/bills/BroadbandBill';
 import { Transactions } from '../pages/transactions/Transactions';
 import { Profile } from '../pages/profile/Profile';
 import { SecuritySettings } from '../pages/profile/SecuritySettings';
@@ -24,17 +25,34 @@ import { PocketMoney } from '../pages/financial/PocketMoney';
 import { CardsPay } from '../pages/financial/CardsPay';
 import { CibilLoan } from '../pages/financial/CibilLoan';
 
+// Travel & Bookings
+import { TrainBooking } from '../pages/travel/TrainBooking';
+import { BusBooking } from '../pages/travel/BusBooking';
+import { FlightBooking } from '../pages/travel/FlightBooking';
+import { HotelBooking } from '../pages/travel/HotelBooking';
+import { MyBookings } from '../pages/travel/MyBookings';
+
+// Shopping & Food
+import { ShoppingMarketplace } from '../pages/shopping/ShoppingMarketplace';
+import { FoodGrocery } from '../pages/food/FoodGrocery';
+
+// Ride Booking & Mobility
+import { RideBooking } from '../pages/mobility/RideBooking';
+
+// Admin Portal
 import { AdminLogin } from '../pages/admin/AdminLogin';
 import { AdminDashboard } from '../pages/admin/AdminDashboard';
 import { AdminUsers } from '../pages/admin/AdminUsers';
 import { AdminTransactions } from '../pages/admin/AdminTransactions';
+import { AdminBookings } from '../pages/admin/AdminBookings';
+import { AdminMerchants } from '../pages/admin/AdminMerchants';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-[#102f6f] border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-4 border-[#101D30] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -113,6 +131,14 @@ export const AppRoutes = () => {
           }
         />
         <Route
+          path="bills/broadband"
+          element={
+            <ProtectedRoute>
+              <BroadbandBill />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="transactions"
           element={
             <ProtectedRoute>
@@ -120,6 +146,94 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Travel & Bookings */}
+        <Route
+          path="travel/trains"
+          element={
+            <ProtectedRoute>
+              <TrainBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="travel/buses"
+          element={
+            <ProtectedRoute>
+              <BusBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="travel/flights"
+          element={
+            <ProtectedRoute>
+              <FlightBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="travel/hotels"
+          element={
+            <ProtectedRoute>
+              <HotelBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="travel/bookings"
+          element={
+            <ProtectedRoute>
+              <MyBookings />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="bookings"
+          element={
+            <ProtectedRoute>
+              <MyBookings />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Shopping & Food */}
+        <Route
+          path="shopping"
+          element={
+            <ProtectedRoute>
+              <ShoppingMarketplace />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="food"
+          element={
+            <ProtectedRoute>
+              <FoodGrocery />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Ride Booking & Mobility */}
+        <Route
+          path="mobility"
+          element={
+            <ProtectedRoute>
+              <RideBooking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="rides"
+          element={
+            <ProtectedRoute>
+              <RideBooking />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Profile & Security */}
         <Route
           path="profile"
           element={
@@ -136,6 +250,8 @@ export const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Fintech Super App Financial Features */}
         <Route
           path="banking/accounts"
           element={
@@ -200,6 +316,8 @@ export const AppRoutes = () => {
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="transactions" element={<AdminTransactions />} />
+        <Route path="bookings" element={<AdminBookings />} />
+        <Route path="merchants" element={<AdminMerchants />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
@@ -207,3 +325,4 @@ export const AppRoutes = () => {
   );
 };
 
+export default AppRoutes;

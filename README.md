@@ -1,10 +1,10 @@
 <div align="center">
 
-# ⚡ PayBen
+# ⚡ PayBen 2.0 — All-in-One Fintech Super App
 
-### **Modern Smart UPI & Multi-Utility Payment Ecosystem**
+### **Modern Smart UPI, Travel, Shopping, Food, Mobility & Multi-Utility Ecosystem**
 
-*A production-grade, full-stack fintech platform built with a decoupled architecture — powered by a high-performance **React.js SPA** frontend and a robust **PHP 8 REST API** backend with **MySQL**.*
+*A production-grade, full-stack digital services super app — bringing together UPI wallet payments, recharges, BBPS utilities, train/bus/flight/hotel travel bookings, shopping discovery, food delivery, and Uber/Rapido ride booking under a unified Neo-Fintech Hybrid experience.*
 
 <br/>
 
@@ -17,9 +17,24 @@
 
 <br/>
 
-> 🛡️ **Sandbox Notice**: All financial transactions, UPI transfers, mobile recharges, and utility settlements run in a simulated fintech environment with zero real money risk.
+> 🛡️ **Zero-Paid Sandbox Architecture**: All financial transactions, travel bookings, and utility payments operate within a self-contained local simulation sandbox using immutable double-entry ledger bookkeeping (`BIGINT` integer paise). External services (Flipkart, Myntra, Swiggy, Uber, Rapido, IRCTC) operate with verified official partner deep-link redirections without capturing user credentials or inventing fake confirmations.
 
 </div>
+
+---
+
+## 🌟 PayBen 2.0 Super App Ecosystem
+
+| Service Domain | Capabilities | Integration Type |
+|---|---|---|
+| **⚡ Payments & UPI** | Wallet balance, P2P transfers, simulated checkout, QR scanner & camera generator, PIN lock screen | **SANDBOX (Local Ledger)** |
+| **📱 Recharges & Utilities** | Mobile prepaid/postpaid, DTH, Electricity, Water, Piped Gas, Broadband & FTTH | **SANDBOX (BBPS Simulator)** |
+| **🚆 Travel & Bookings** | Train tickets (Vande Bharat, Rajdhani), Intercity buses (IntrCity, Zingbus, VRL), Flights (IndiGo, Air India), Hotel rooms | **SANDBOX + Official Redirect (IRCTC, redBus)** |
+| **🛍️ Online Shopping** | Marketplace directory (Flipkart, Myntra, Meesho; Jabong disabled by default) | **EXTERNAL_REDIRECT (Verified)** |
+| **🍔 Food & Grocery** | On-demand dining & 10-minute grocery pantry via Swiggy | **EXTERNAL_REDIRECT (Verified)** |
+| **🚗 Ride Booking & Mobility** | Cabs, Auto Rickshaws & Bike Taxis via Uber & Rapido with route fare estimators | **EXTERNAL_REDIRECT (Deep-Link)** |
+| **🛡️ Risk & Fraud Engine** | Rule-based velocity checks, IP tracking, double-entry ledger verification | **INTERNAL (Rule-Based)** |
+| **👑 Admin Oversight** | Users, ledger transactions, travel reservations, partner merchants, CSV reporting | **ROLE-BASED PORTAL** |
 
 ---
 

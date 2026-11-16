@@ -114,6 +114,16 @@ function getDBConnection(): PDO {
                 }
             }
 
+            // Auto-apply super app migration if bookings or merchants table missing
+            try {
+                $pdo->query("SELECT 1 FROM bookings LIMIT 1");
+            } catch (\Throwable $tb) {
+                $migFile2 = dirname(__DIR__) . '/database/migrations/002_super_app_upgrade.sql';
+                if (file_exists($migFile2)) {
+                    $pdo->exec(file_get_contents($migFile2));
+                }
+            }
+
             return $pdo;
         } catch (PDOException $e) {
             $lastError = $e;

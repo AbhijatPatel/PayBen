@@ -7,6 +7,7 @@ import {
   Zap,
   Droplet,
   Flame,
+  Wifi,
   Wallet,
   History,
   Shield,
@@ -17,8 +18,15 @@ import {
   CreditCard,
   TrendingUp,
   Sparkles,
-  ShieldCheck,
-  ChevronRight
+  Train,
+  Bus,
+  Plane,
+  Building2,
+  Briefcase,
+  ShoppingBag,
+  Utensils,
+  Car,
+  ShieldCheck
 } from 'lucide-react';
 
 const navGroups = [
@@ -31,19 +39,43 @@ const navGroups = [
     ]
   },
   {
-    title: 'Popular Services',
+    title: 'Recharge & Bills',
     items: [
       { name: 'Mobile Recharge', path: '/recharge/mobile', icon: Smartphone },
       { name: 'DTH Recharge', path: '/recharge/dth', icon: Tv },
       { name: 'Electricity Bill', path: '/bills/electricity', icon: Zap },
       { name: 'Water Bill', path: '/bills/water', icon: Droplet },
-      { name: 'Gas Bill', path: '/bills/gas', icon: Flame }
+      { name: 'Gas Bill', path: '/bills/gas', icon: Flame },
+      { name: 'Broadband & FTTH', path: '/bills/broadband', icon: Wifi }
+    ]
+  },
+  {
+    title: 'Travel & Bookings',
+    items: [
+      { name: 'Train Tickets', path: '/travel/trains', icon: Train },
+      { name: 'Bus Tickets', path: '/travel/buses', icon: Bus },
+      { name: 'Flight Tickets', path: '/travel/flights', icon: Plane },
+      { name: 'Hotel Bookings', path: '/travel/hotels', icon: Building2 },
+      { name: 'My Bookings', path: '/travel/bookings', icon: Briefcase }
+    ]
+  },
+  {
+    title: 'Shopping & Food',
+    items: [
+      { name: 'Shopping Directory', path: '/shopping', icon: ShoppingBag },
+      { name: 'Food & Groceries', path: '/food', icon: Utensils }
+    ]
+  },
+  {
+    title: 'Ride Booking & Mobility',
+    items: [
+      { name: 'Uber & Rapido Rides', path: '/mobility', icon: Car }
     ]
   },
   {
     title: 'Fintech Super App',
     items: [
-      { name: 'Bank Accounts', path: '/banking/accounts', icon: Landmark },
+      { name: 'Bank Accounts & UPI', path: '/banking/accounts', icon: Landmark },
       { name: 'UPI Lite (Zero PIN)', path: '/financial/upi-lite', icon: Zap },
       { name: 'AutoPay Mandates', path: '/financial/autopay', icon: Repeat },
       { name: 'Pocket Money', path: '/financial/pocket-money', icon: Sparkles },
@@ -77,13 +109,13 @@ export const Sidebar = ({ isOpen, onClose }) => {
         className={`fixed top-0 bottom-0 left-0 w-64 bg-white border-r border-gray-200/90 z-50 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:z-auto ${
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
-        aria-label="Sidebar Navigation"
+        aria-label="PayBen Super App Sidebar Navigation"
       >
         {/* Mobile Header Drawer Close */}
         <div className="flex items-center justify-between p-4 border-b border-gray-100 lg:hidden">
           <div className="flex items-center gap-2">
             <img src="/payben-app-icon.svg" alt="PayBen" className="w-7 h-7 rounded-lg" />
-            <span className="font-extrabold text-base text-[#101D30]">Navigation</span>
+            <span className="font-extrabold text-base text-[#101D30]">Super App Menu</span>
           </div>
           <button
             onClick={onClose}
@@ -95,7 +127,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* Grouped Nav Items */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-5 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto p-3 space-y-4 scrollbar-thin">
           {navGroups.map((group) => (
             <div key={group.title} className="space-y-1">
               <div className="px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-gray-400">
@@ -134,12 +166,12 @@ export const Sidebar = ({ isOpen, onClose }) => {
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold text-[#35D6B0] uppercase flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-[#35D6B0] animate-pulse" />
-                <span>Simulated Network</span>
+                <span>Super App Sandbox 2.0</span>
               </span>
               <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
             </div>
             <p className="text-[10px] text-slate-400 leading-tight">
-              Test mode active • Atomic double-entry ledger enabled.
+              Recharges • Bills • Travel • Shopping • Mobility
             </p>
           </div>
         </div>
