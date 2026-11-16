@@ -1,0 +1,365 @@
+/* PayBen Intro Screen — High-End Fintech Motion System */
+
+:root {
+  --pb-navy: #101D30;
+  --pb-navy-deep: #0B1320;
+  --pb-mint: #35D6B0;
+  --pb-mint-glow: rgba(53, 214, 176, 0.45);
+  --pb-slate: #8FA3BF;
+  --pb-white: #FFFFFF;
+}
+
+/* Fullscreen Overlay Container */
+.payben-intro-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  background-color: var(--pb-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+}
+
+/* Stage 5: Exit fade out */
+.payben-intro-overlay.is-exiting {
+  opacity: 0;
+  transform: scale(1.03);
+  pointer-events: none;
+}
+
+/* Ambient Radial Glow Background */
+.payben-intro-backdrop {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 50% 46%, rgba(53, 214, 176, 0.14) 0%, rgba(16, 29, 48, 0.6) 42%, var(--pb-navy) 78%),
+    radial-gradient(circle at 50% 100%, rgba(15, 23, 42, 0.9) 0%, transparent 60%);
+  animation: pbBackdropPulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes pbBackdropPulse {
+  0% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+/* Subtle Geometric Grid Matrix */
+.payben-intro-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at 50% 48%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, black 30%, transparent 75%);
+  pointer-events: none;
+}
+
+/* Central Stage Container */
+.payben-intro-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* Monogram Wrapper */
+.payben-intro-logo-box {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Monogram SVG */
+.payben-intro-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 20px rgba(53, 214, 176, 0.35));
+}
+
+/* Initial Glowing Mint Origin Seed */
+.payben-intro-seed {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--pb-mint);
+  box-shadow: 0 0 16px 6px var(--pb-mint-glow);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pbSeedPulse 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes pbSeedPulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.6);
+    box-shadow: 0 0 24px 10px rgba(53, 214, 176, 0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.8);
+  }
+}
+
+/* Stage 2: Outer White P Path Animation */
+.payben-path-outer {
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  animation: pbDrawOuter 1.0s cubic-bezier(0.65, 0, 0.25, 1) 0.35s forwards;
+}
+
+@keyframes pbDrawOuter {
+  0% {
+    stroke-dashoffset: 260;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* Stage 2: Interlocking Mint Ribbon Animation */
+.payben-path-mint {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: pbDrawMint 0.85s cubic-bezier(0.65, 0, 0.25, 1) 0.55s forwards;
+}
+
+@keyframes pbDrawMint {
+  0% {
+    stroke-dashoffset: 120;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* Terminal Node Pop */
+.payben-node-pop {
+  opacity: 0;
+  transform-origin: 92px 44px;
+  animation: pbNodePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 1.25s forwards;
+}
+
+@keyframes pbNodePop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Stage 3: Brand Text Typography */
+.payben-intro-brand {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: pbTextReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) 1.05s forwards;
+}
+
+.payben-intro-title {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  color: var(--pb-white);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.payben-intro-title .brand-accent {
+  color: var(--pb-mint);
+  margin-left: 1px;
+}
+
+@keyframes pbTextReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stage 4: Tagline */
+.payben-intro-tagline {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: pbTaglineReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.45s forwards;
+  margin-top: 0.65rem;
+}
+
+.payben-intro-tagline p {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--pb-slate);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+@keyframes pbTaglineReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+    letter-spacing: 0.18em;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: 0.28em;
+  }
+}
+
+/* Status Indicator Dot */
+.payben-intro-status {
+  margin-top: 1.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: pbFadeIn 0.4s ease 1.8s forwards;
+}
+
+.payben-intro-status .status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--pb-mint);
+  box-shadow: 0 0 8px var(--pb-mint);
+  animation: pbBlink 1.2s infinite ease-in-out;
+}
+
+.payben-intro-status span {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 600;
+}
+
+@keyframes pbBlink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes pbFadeIn {
+  to { opacity: 1; }
+}
+
+/* Subtle Skip Button */
+.payben-intro-skip {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  opacity: 0;
+  animation: pbFadeIn 0.3s ease 0.6s forwards;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.payben-intro-skip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border-color: rgba(53, 214, 176, 0.4);
+}
+
+/* Mobile & Small Screen Adaptations */
+@media (max-width: 640px) {
+  .payben-intro-logo-box {
+    width: 105px;
+    height: 105px;
+    margin-bottom: 1.2rem;
+  }
+  .payben-intro-title {
+    font-size: 1.85rem;
+  }
+  .payben-intro-tagline p {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+  }
+  .payben-intro-skip {
+    top: 1rem;
+    right: 1rem;
+    padding: 0.35rem 0.75rem;
+  }
+}
+
+/* Accessibility: Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .payben-intro-overlay {
+    transition: opacity 0.15s ease !important;
+  }
+  .payben-intro-backdrop,
+  .payben-intro-seed,
+  .payben-path-outer,
+  .payben-path-mint,
+  .payben-node-pop,
+  .payben-intro-brand,
+  .payben-intro-tagline,
+  .payben-intro-status {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .payben-intro-seed {
+    display: none !important;
+  }
+}

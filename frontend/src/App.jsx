@@ -7,6 +7,7 @@ import { SecurityProvider } from './context/SecurityContext';
 import { FintechProvider } from './context/FintechContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { SecurityLockScreen } from './components/security/SecurityLockScreen';
+import { PayBenIntro } from './components/intro/PayBenIntro';
 import { AppRoutes } from './routes/AppRoutes';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <AuthProvider>
               <FintechProvider>
                 <SecurityProvider>
+                  <PayBenIntro />
                   <SecurityLockScreen />
                   <AppRoutes />
                 </SecurityProvider>
