@@ -164,8 +164,8 @@ export const PayBenIntro = ({ onComplete, forceShow = false, duration = 2500 }) 
 
             {/* Mint Terminal Settlement Node */}
             <g className="payben-node-pop">
-              <circle cx="92" cy="44" r="3.2" fill="#35D6B0" />
-              <circle cx="92" cy="44" r="1.6" fill="#101D30" />
+              <circle cx="92" cy="44" r="5" fill="#35D6B0" />
+              <circle cx="92" cy="44" r="2.5" fill="#101D30" />
             </g>
           </svg>
         </div>
