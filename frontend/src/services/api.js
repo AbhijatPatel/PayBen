@@ -9,7 +9,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   },
-  timeout: 15000
+  timeout: 45000 // 45s timeout to comfortably accommodate Railway container cold-starts
 });
 
 // Attach Bearer token if stored
@@ -21,11 +21,20 @@ api.interceptors.request.use((config) => {
   return config;
 }, (error) => Promise.reject(error));
 
-// Response error handler
+// Response error handler with graceful timeout messaging
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message = error.response?.data?.message || error.message || 'Something went wrong';
+    let message = error.response?.data?.message;
+    if (!message) {
+      if (error.code === 'ECONNABORTED' || (error.message && error.message.toLowerCase().includes('timeout'))) {
+        message = 'Server response took longer than expected (cloud container waking up). Please try again in a moment.';
+      } else if (error.message === 'Network Error') {
+        message = 'Unable to connect to PayBen backend. Please check your network connection.';
+      } else {
+        message = error.message || 'Something went wrong';
+      }
+    }
     return Promise.reject(new Error(message));
   }
 );

@@ -38,38 +38,19 @@ function getDatabaseConfig(): array {
 
 function getDatabaseConnectionCandidates(): array {
     $config = getDatabaseConfig();
-    $hosts = array_values(array_unique([$config['host'], '127.0.0.1', 'localhost', 'db', 'mysql']));
-    $ports = array_values(array_unique([$config['port'], '3306', '3307']));
-    $users = array_values(array_unique([$config['user'], 'root', 'mysql', 'payben']));
-    $passwords = array_values(array_unique([
-        $config['password'],
-        '',
-        getenv('MYSQL_ROOT_PASSWORD') ?: '',
-        getenv('MYSQL_PASSWORD') ?: '',
-        getenv('DB_PASS') ?: '',
-        'root',
-        'password',
-    ]));
-    $dbNames = array_values(array_unique([$config['dbname'], 'payben_db', 'mysql']));
+    $candidates = [$config];
 
-    $candidates = [];
-    foreach ($hosts as $host) {
-        foreach ($ports as $port) {
-            foreach ($users as $user) {
-                foreach ($passwords as $password) {
-                    foreach ($dbNames as $dbname) {
-                        $candidates[] = [
-                            'host' => $host,
-                            'port' => $port,
-                            'dbname' => $dbname,
-                            'user' => $user,
-                            'password' => $password,
-                            'charset' => $config['charset'],
-                        ];
-                    }
-                }
-            }
-        }
+    // If explicit cloud database URL is provided, don't waste time trying local hosts
+    if (!empty(getenv('DATABASE_URL')) || !empty(getenv('MYSQL_URL'))) {
+        return $candidates;
+    }
+
+    // Fast local fallbacks for development (at most 3 candidates)
+    if ($config['host'] !== '127.0.0.1') {
+        $candidates[] = array_merge($config, ['host' => '127.0.0.1', 'port' => '3306']);
+    }
+    if ($config['host'] !== 'localhost') {
+        $candidates[] = array_merge($config, ['host' => 'localhost', 'port' => '3306']);
     }
 
     return $candidates;
@@ -85,6 +66,7 @@ function getDBConnection(): PDO {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_TIMEOUT => 3, // Fast 3-second connection timeout to prevent hanging
     ];
 
     $lastError = null;
@@ -121,6 +103,17 @@ function getDBConnection(): PDO {
                 $migFile2 = dirname(__DIR__) . '/database/migrations/002_super_app_upgrade.sql';
                 if (file_exists($migFile2)) {
                     $pdo->exec(file_get_contents($migFile2));
+                }
+            }
+
+            // Auto-apply Google Auth migration if google_id column missing
+            try {
+                $pdo->query("SELECT google_id FROM users LIMIT 1");
+            } catch (\Throwable $tb) {
+                try {
+                    $pdo->exec("ALTER TABLE users ADD COLUMN google_id VARCHAR(100) NULL AFTER email, ADD INDEX idx_users_google_id (google_id)");
+                } catch (\Throwable $e2) {
+                    // Ignore if column was concurrently added
                 }
             }
 
