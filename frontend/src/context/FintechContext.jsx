@@ -326,6 +326,7 @@ export const FintechProvider = ({ children }) => {
         addAutoPayMandate,
         toggleAutoPayStatus,
         pocketMoney,
+        pocketMoneyBalance: pocketMoney?.balance || 0,
         topUpPocketMoney,
         cards,
         addCard,

@@ -116,7 +116,7 @@ export const CardsPay = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {cards.map((card) => (
+          {(cards || []).map((card) => (
             <div
               key={card.id}
               className={`relative h-56 rounded-3xl p-6 text-white shadow-xl flex flex-col justify-between overflow-hidden bg-gradient-to-tr ${card.gradient} border border-white/20 select-none group transition-transform hover:scale-[1.02]`}

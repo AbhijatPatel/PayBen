@@ -56,7 +56,7 @@ export const UpiLite = () => {
               UPI Lite Available Balance
             </span>
             <div className="text-3xl sm:text-4xl font-black text-gray-900 font-mono mt-1">
-              ₹{upiLiteBalance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+              ₹{(upiLiteBalance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </div>
             <span className="text-[11px] text-gray-400 font-medium mt-1 block">
               Maximum allowable balance: ₹2,000.00

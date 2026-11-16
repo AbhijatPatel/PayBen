@@ -19,18 +19,28 @@ export const PocketMoney = () => {
   const { addToast } = useToast();
   const [topUpAmount, setTopUpAmount] = useState('500');
 
+  const safePocket = pocketMoney || {
+    account_name: "Aryan's Student Allowance",
+    balance: 1450.00,
+    monthly_budget: 3000.00,
+    spent_this_month: 1550.00,
+    history: []
+  };
+
   const handleTopUp = (e) => {
     e.preventDefault();
     const ok = topUpPocketMoney(topUpAmount);
     if (ok) {
-      addToast(`₹${topUpAmount} sent to ${pocketMoney.account_name}!`, 'success');
+      addToast(`₹${topUpAmount} sent to ${safePocket.account_name}!`, 'success');
       setTopUpAmount('');
     } else {
       addToast('Invalid amount', 'error');
     }
   };
 
-  const percentSpent = Math.min(100, Math.round((pocketMoney.spent_this_month / pocketMoney.monthly_budget) * 100));
+  const budget = safePocket.monthly_budget || 3000;
+  const spent = safePocket.spent_this_month || 0;
+  const percentSpent = Math.min(100, Math.round((spent / budget) * 100));
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 pb-12 animate-in fade-in">
@@ -41,7 +51,7 @@ export const PocketMoney = () => {
             <Sparkles className="w-3.5 h-3.5" />
             <span>Family & Teen Allowance Sub-Wallet</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{pocketMoney.account_name}</h2>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{safePocket.account_name}</h2>
           <p className="text-xs sm:text-sm text-orange-100 max-w-md">
             Safe, parent-controlled digital wallet for kids and teens. Set monthly budget caps and track every expense.
           </p>
@@ -64,7 +74,7 @@ export const PocketMoney = () => {
           <div className="flex items-center gap-2">
             <div className="w-10 h-7 rounded bg-amber-300 border border-yellow-100 shadow-inner" />
             <span className="text-sm font-mono tracking-widest font-bold">
-              {pocketMoney.card_number}
+              {safePocket.card_number || '•••• •••• •••• 4092'}
             </span>
           </div>
 
@@ -72,7 +82,7 @@ export const PocketMoney = () => {
             <div>
               <span className="text-[10px] text-amber-100 uppercase tracking-wider block">Available Balance</span>
               <div className="text-2xl font-black font-mono">
-                ₹{pocketMoney.balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                ₹{Number(safePocket.balance || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </div>
             </div>
             <div className="text-right">
@@ -87,7 +97,7 @@ export const PocketMoney = () => {
           <div>
             <div className="flex justify-between items-center text-xs font-bold text-gray-700 mb-2">
               <span>Monthly Budget Utilization</span>
-              <span>₹{pocketMoney.spent_this_month} / ₹{pocketMoney.monthly_budget} ({percentSpent}%)</span>
+              <span>₹{safePocket.spent_this_month || 0} / ₹{safePocket.monthly_budget || 3000} ({percentSpent}%)</span>
             </div>
             <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
               <div
@@ -141,7 +151,7 @@ export const PocketMoney = () => {
       <div className="bg-white rounded-3xl border border-gray-200/80 p-6 shadow-xs space-y-4">
         <h3 className="text-base font-bold text-gray-900">Allowance Activity & Spends</h3>
         <div className="divide-y divide-gray-100">
-          {pocketMoney.transactions.map((tx) => (
+          {(safePocket.transactions || []).map((tx) => (
             <div key={tx.id} className="py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div

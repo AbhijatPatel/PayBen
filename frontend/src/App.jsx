@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { SecurityProvider } from './context/SecurityContext';
@@ -10,20 +11,22 @@ import { AppRoutes } from './routes/AppRoutes';
 
 function App() {
   return (
-    <BrowserRouter>
-      <LanguageProvider>
-        <ToastProvider>
-          <AuthProvider>
-            <FintechProvider>
-              <SecurityProvider>
-                <SecurityLockScreen />
-                <AppRoutes />
-              </SecurityProvider>
-            </FintechProvider>
-          </AuthProvider>
-        </ToastProvider>
-      </LanguageProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <LanguageProvider>
+          <ToastProvider>
+            <AuthProvider>
+              <FintechProvider>
+                <SecurityProvider>
+                  <SecurityLockScreen />
+                  <AppRoutes />
+                </SecurityProvider>
+              </FintechProvider>
+            </AuthProvider>
+          </ToastProvider>
+        </LanguageProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

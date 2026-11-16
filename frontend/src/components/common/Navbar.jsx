@@ -104,7 +104,7 @@ export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenM
                 <div className="flex items-center gap-1.5">
                   <WalletIcon className="w-4 h-4 text-[#0047cc]" />
                   <span className="text-sm font-black text-gray-900 font-mono">
-                    {hideBalance ? '₹ ••••••' : wallet.formatted_balance}
+                    {hideBalance ? '₹ ••••••' : (wallet?.formatted_balance || '₹0.00')}
                   </span>
                   <button
                     onClick={toggleHideBalance}

@@ -353,7 +353,7 @@ export const ScanPayModal = ({ isOpen, onClose }) => {
                   <div>
                     <p className="leading-tight">UPI Lite (0 PIN)</p>
                     <span className="text-[10px] font-normal text-orange-200">
-                      ₹{upiLiteBalance.toFixed(2)}
+                      ₹{Number(upiLiteBalance || 0).toFixed(2)}
                     </span>
                   </div>
                 </button>

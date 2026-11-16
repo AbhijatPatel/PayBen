@@ -35,7 +35,7 @@ export const AutoPay = () => {
     addAutoPayMandate({
       name: billerName,
       category,
-      amount_limit: `₹${parseFloat(maxLimit).toFixed(2)}`,
+      amount_limit: `₹${parseFloat(maxLimit || 0).toFixed(2)}`,
       frequency,
       next_date: '01 Next Month',
       bank: selectedBank
