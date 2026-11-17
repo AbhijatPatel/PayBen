@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { GoogleLoginButton } from '../../components/auth/GoogleLoginButton';
 import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from 'lucide-react';
 
 export const Login = () => {
-  const { login, googleLogin } = useAuth();
+  const { login } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -47,18 +46,6 @@ export const Login = () => {
     }
   };
 
-  const handleGoogleSuccess = async (payload) => {
-    try {
-      const res = await googleLogin(payload);
-      if (res.success) {
-        addToast('Welcome back to PayBen!', 'success');
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      addToast(error.message || 'Google sign-in could not be completed.', 'error');
-    }
-  };
-
   return (
     <main className="flex min-h-screen items-center justify-center bg-white px-4 py-10 sm:px-6">
       <section className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_24px_70px_rgba(16,29,48,0.10)] sm:p-9">
@@ -73,22 +60,7 @@ export const Login = () => {
           <div className="mx-auto mt-5 h-1 w-12 rounded-full bg-[#35D6B0]" />
         </header>
 
-        <div className="space-y-5">
-          <GoogleLoginButton
-            onSuccess={handleGoogleSuccess}
-            onError={(error) => addToast(error.message || 'Google sign-in failed.', 'error')}
-            text="Continue with Google"
-          />
-
-          <div className="relative flex items-center" aria-hidden="true">
-            <div className="w-full border-t border-slate-200" />
-            <span className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap bg-white px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
-              or sign in with email
-            </span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} noValidate className="mt-0 space-y-4">
           <div>
             <label htmlFor="login-email" className="mb-1.5 block text-sm font-semibold text-[#101D30]">
               Email address

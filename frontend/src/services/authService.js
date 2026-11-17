@@ -35,18 +35,6 @@ export const authService = {
     }
   },
 
-  async googleLogin(payload) {
-    try {
-      const res = await api.post('/auth/google.php', payload);
-      if (res.data.data?.token) {
-        localStorage.setItem('payben_token', res.data.data.token);
-      }
-      return res.data;
-    } catch (error) {
-      throw getAuthError(error, 'google');
-    }
-  },
-
   async register(fullName, email, mobile, password, confirmPassword) {
     try {
       const res = await api.post('/auth/register.php', {

@@ -54,7 +54,6 @@ This guide walks you through deploying PayBen into production with zero cost usi
 2. Expand the **Environment Variables** section and add:
    - **Name:** `VITE_API_BASE_URL`
    - **Value:** `https://payben-production.up.railway.app/api`
-   - Also set `VITE_GOOGLE_CLIENT_ID` to the Google Web OAuth client ID.
 3. Click **Deploy**!
 
 Vercel will build and deploy your React application in ~45 seconds and give you a live URL like `https://payben.vercel.app`.
@@ -64,7 +63,7 @@ Vercel will build and deploy your React application in ~45 seconds and give you 
 ## Part 3: Final CORS Handshake
 
 1. Return to your **Railway** backend service.
-2. Go to **Variables** and ensure `FRONTEND_URL` is `https://frontend-3p6j.vercel.app` and `GOOGLE_CLIENT_ID` is set to the same Web OAuth client ID used by Vercel.
+2. Go to **Variables** and ensure `FRONTEND_URL` is `https://frontend-3p6j.vercel.app`. Set `GOOGLE_CLIENT_ID` only if an external API client will use the backend Google authentication endpoint; the PayBen React login and registration pages do not expose Google sign-in.
 3. PayBen's CORS middleware allows the exact `FRONTEND_URL` origin and configured local origins. Do not use wildcard preview-domain access; update `FRONTEND_URL` when deploying to a different frontend domain.
 
 ---

@@ -118,6 +118,7 @@ curl -c cookies.txt -X POST http://localhost/PayBen/api/auth/login.php \
 
 ### POST /auth/google.php
 Authenticate with a Google Identity Services ID token. The frontend must send Google's returned `credential` value; user profile fields are never accepted as proof of identity.
+The current PayBen React login and registration pages do not expose Google sign-in; this backend route is retained for existing API clients.
 
 ```json
 { "credential": "<Google ID token>" }

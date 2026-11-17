@@ -52,15 +52,6 @@ export const AuthProvider = ({ children }) => {
     return res;
   };
 
-  const googleLogin = async (payload) => {
-    const res = await authService.googleLogin(payload);
-    if (res.success && res.data) {
-      setUser(res.data.user);
-      setWallet(res.data.wallet);
-    }
-    return res;
-  };
-
   const register = async (fullName, email, mobile, password, confirmPassword) => {
     const res = await authService.register(fullName, email, mobile, password, confirmPassword);
     if (res.success && res.data) {
@@ -86,7 +77,6 @@ export const AuthProvider = ({ children }) => {
         wallet,
         loading,
         login,
-        googleLogin,
         register,
         logout,
         refreshBalance,

@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { GoogleLoginButton } from '../../components/auth/GoogleLoginButton';
 import { User, Mail, Smartphone, Lock, Eye, EyeOff, Loader2, ArrowRight, Gift } from 'lucide-react';
 
 export const Register = () => {
-  const { register, googleLogin } = useAuth();
+  const { register } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
@@ -46,18 +45,6 @@ export const Register = () => {
     }
   };
 
-  const handleGoogleSuccess = async (payload) => {
-    try {
-      const res = await googleLogin(payload);
-      if (res.success) {
-        addToast('Welcome to PayBen! ₹500 welcome bonus loaded.', 'success');
-        navigate('/dashboard');
-      }
-    } catch (err) {
-      addToast(err.message || 'Google sign-up failed', 'error');
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-gray-200/80 p-8 space-y-6">
@@ -69,22 +56,6 @@ export const Register = () => {
           />
           <h2 className="text-2xl font-black text-gray-900 tracking-tight">Create your account</h2>
           <p className="text-xs text-gray-500">Sign up and get ₹500 instant wallet credit</p>
-        </div>
-
-        {/* Google Quick Sign-Up */}
-        <div className="space-y-3">
-          <GoogleLoginButton
-            onSuccess={handleGoogleSuccess}
-            onError={(err) => addToast(err.message || 'Google sign-up failed', 'error')}
-            text="Sign up with Google"
-          />
-
-          <div className="relative flex items-center justify-center pt-2">
-            <div className="border-t border-gray-200 w-full" />
-            <span className="bg-white px-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider absolute">
-              or register with details
-            </span>
-          </div>
         </div>
 
         <div className="p-3 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-2.5 text-xs text-emerald-900 font-semibold">

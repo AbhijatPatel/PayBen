@@ -124,25 +124,11 @@ You should see the PayBen landing page with "Get Started" and "Login" buttons.
 
 ---
 
-## Step 7 — Configure Google Sign-In (Optional)
+## Step 7 — Google Authentication API (Optional)
 
-PayBen uses Google Identity Services' sign-in button to obtain an ID token. The backend downloads Google's public signing certificates over HTTPS and verifies the token signature locally with PHP OpenSSL, then checks the issuer, expiration, verified email, and OAuth client audience. No Google client secret or redirect URI is used by this popup flow.
+The React login and registration pages use email and password only; they do not show Google sign-in controls. The backend `/api/auth/google.php` endpoint remains available for existing API clients and verifies Google ID tokens server-side. Those API clients need a Google Web OAuth client ID configured as `GOOGLE_CLIENT_ID` in the backend; the frontend does not need `VITE_GOOGLE_CLIENT_ID`. No client secret or redirect URI is used by the ID-token flow.
 
-1. In Google Cloud Console, select or create a project and configure the OAuth consent screen (including test users while the app is in testing).
-2. Create an **OAuth client ID** of type **Web application**.
-3. Under **Authorized JavaScript origins**, add each origin used by the app:
-   - `http://127.0.0.1:5173` (the Vite development server default)
-   - `http://localhost:5173` (if you open the app using `localhost`)
-   - `https://frontend-3p6j.vercel.app` (the current live deployment)
-4. **Authorized redirect URIs:** none are required for this popup-based ID-token flow.
-5. Copy the OAuth client ID (not a client secret) into both configuration files:
-   - `frontend/.env`: `VITE_GOOGLE_CLIENT_ID=your-web-client-id`
-   - `backend/.env`: `GOOGLE_CLIENT_ID=your-web-client-id`
-6. For deployment, set `VITE_GOOGLE_CLIENT_ID` in Vercel and `GOOGLE_CLIENT_ID` in Railway to the same web client ID. Set Railway's `FRONTEND_URL` to `https://frontend-3p6j.vercel.app` and add that origin to the Google client's authorized JavaScript origins.
-
-Copy `frontend/.env.example` to `frontend/.env` and `backend/.env.example` to `backend/.env` as needed. On Windows PHP installs that cannot verify Google's certificate chain, download the PEM CA bundle from `https://curl.se/ca/cacert.pem`, save it as `backend/certs/cacert.pem`, and set `GOOGLE_CA_BUNDLE=C:\PayBen\backend\certs\cacert.pem` in the local backend environment. TLS peer and hostname verification remain enabled. Restart PHP and Vite after changing environment variables. If the Google client ID is missing, Google sign-in reports that configuration is required and does not create or authenticate a user.
-
-To link Google to an existing password account, first sign in with that password in the same browser session, then open the sign-in page and complete Google sign-in with the matching verified email. An unauthenticated Google sign-in cannot take over an existing email account.
+On Windows PHP installs that cannot verify Google's certificate chain, download the PEM CA bundle from `https://curl.se/ca/cacert.pem`, save it as `backend/certs/cacert.pem`, and set `GOOGLE_CA_BUNDLE=C:\PayBen\backend\certs\cacert.pem` in the local backend environment. TLS peer and hostname verification remain enabled. Restart PHP after changing backend environment variables.
 
 ## Local Development (Windows PowerShell)
 
