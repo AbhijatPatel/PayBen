@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
+
 // Load .env variables if file exists
 $envFile = dirname(__DIR__) . '/.env';
 if (file_exists($envFile)) {
@@ -10,7 +13,7 @@ if (file_exists($envFile)) {
             list($key, $val) = explode('=', $line, 2);
             $key = trim($key);
             $val = trim($val);
-            if (!array_key_exists($key, $_SERVER) && !array_key_exists($key, $_ENV)) {
+            if (getenv($key) === false && !array_key_exists($key, $_SERVER) && !array_key_exists($key, $_ENV)) {
                 putenv("$key=$val");
                 $_ENV[$key] = $val;
                 $_SERVER[$key] = $val;
@@ -19,10 +22,22 @@ if (file_exists($envFile)) {
     }
 }
 
+define('APP_ENV', strtolower(getenv('APP_ENV') ?: 'development'));
 define('APP_NAME', getenv('APP_NAME') ?: 'PayBen');
 define('APP_TAGLINE', 'Smart Recharge & Bill Payment Platform');
 define('APP_VERSION', '2.0.0');
-define('APP_SECRET', getenv('APP_SECRET') ?: 'payben_fintech_sandbox_hmac_secret_2026_xyz');
+$appSecret = trim((string)getenv('APP_SECRET'));
+if ($appSecret === '' && APP_ENV === 'production') {
+    error_log('APP_SECRET is not configured.');
+    if (php_sapi_name() !== 'cli') {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=UTF-8');
+        echo json_encode(['success' => false, 'message' => 'PayBen authentication is not configured. Please contact the administrator.']);
+        exit;
+    }
+    throw new RuntimeException('APP_SECRET must be configured.');
+}
+define('APP_SECRET', $appSecret ?: 'payben_fintech_sandbox_hmac_secret_2026_xyz');
 define('FRONTEND_URL', getenv('FRONTEND_URL') ?: 'http://localhost:5173');
 
 define('PAYMENT_PROVIDER', getenv('PAYMENT_PROVIDER') ?: 'mock');
@@ -51,9 +66,7 @@ if (!$isCli && !headers_sent()) {
         $allowedOrigins[] = rtrim($frontendEnv, '/');
     }
 
-    $isVercel = (bool)preg_match('/^https?:\/\/[a-z0-9\-\.]+\.vercel\.app$/i', $origin);
-
-    if (in_array($origin, $allowedOrigins, true) || $isVercel || empty($origin)) {
+    if (in_array($origin, $allowedOrigins, true) || empty($origin)) {
         header('Access-Control-Allow-Origin: ' . ($origin ?: 'http://localhost:5173'));
     }
     header('Access-Control-Allow-Credentials: true');
@@ -75,8 +88,6 @@ if (!$isCli && !headers_sent()) {
     }
 }
 
-error_reporting(E_ALL);
-ini_set('display_errors', '0');
 date_default_timezone_set('Asia/Kolkata');
 
 function jsonResponse($data, int $statusCode = 200) {

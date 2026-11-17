@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useSecurity } from '../../context/SecurityContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useToast } from '../../context/ToastContext';
 import {
   Wallet as WalletIcon,
   Search,
@@ -29,6 +30,7 @@ import {
 
 export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenMyQr }) => {
   const { user, wallet, logout } = useAuth();
+  const { addToast } = useToast();
   const { hideBalance, toggleHideBalance, lockApp, appLockEnabled } = useSecurity();
   const { lang, toggleLanguage, t } = useLanguage();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -36,8 +38,13 @@ export const Navbar = ({ onToggleSidebar, onOpenAddMoney, onOpenScanPay, onOpenM
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout();
-    navigate('/login');
+    try {
+      await logout();
+      navigate('/login');
+    } catch {
+      addToast('Signed out on this device, but the server could not confirm the session ended.', 'error');
+      navigate('/login');
+    }
   };
 
   return (

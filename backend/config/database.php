@@ -117,6 +117,15 @@ function getDBConnection(): PDO {
                 }
             }
 
+            try {
+                $pdo->query("SELECT token_hash FROM password_reset_tokens LIMIT 1");
+            } catch (\Throwable $tb) {
+                $resetMigration = dirname(__DIR__) . '/database/migrations/004_password_reset_tokens.sql';
+                if (file_exists($resetMigration)) {
+                    $pdo->exec(file_get_contents($resetMigration));
+                }
+            }
+
             return $pdo;
         } catch (PDOException $e) {
             $lastError = $e;

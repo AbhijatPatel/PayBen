@@ -55,6 +55,15 @@ CREATE TABLE `users` (
   INDEX `idx_users_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+  `email` VARCHAR(100) NOT NULL,
+  `token_hash` CHAR(64) NOT NULL,
+  `expires_at` DATETIME NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`email`),
+  INDEX `idx_password_reset_expires_at` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- ==============================================================================
 -- 2. Table: admins
 -- Administrative users with role-based platform access
@@ -238,7 +247,6 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ------------------------------------------------------------------------------
 -- 1. Users Seed Data
 -- Passwords hashed using PHP's PASSWORD_DEFAULT (bcrypt cost 10)
--- Both user1@test.com & user2@test.com password: "password123"
 -- Hash: $2y$10$yXP2s.Cwf4jlYWc9mTM88OGQvnMyZHyAFRa1AX33hT4BqB66rYVGm
 -- ------------------------------------------------------------------------------
 INSERT INTO `users` (`id`, `full_name`, `email`, `mobile`, `password_hash`, `avatar`, `status`, `created_at`) VALUES

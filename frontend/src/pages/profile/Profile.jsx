@@ -32,8 +32,12 @@ export const Profile = () => {
   };
 
   const handleLogout = async () => {
-    await logout();
-    addToast('Signed out successfully.', 'info');
+    try {
+      await logout();
+      addToast('Signed out successfully.', 'info');
+    } catch {
+      addToast('Signed out on this device, but the server could not confirm the session ended.', 'error');
+    }
     navigate('/login');
   };
 

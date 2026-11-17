@@ -224,15 +224,9 @@ npm run dev
 
 ---
 
-## 🔑 Test Credentials
+## 🔑 Getting Started
 
-| Account | Email / Username | Password | Role | Wallet Balance |
-| :--- | :--- | :--- | :--- | :--- |
-| **Rahul Sharma** | `user1@test.com` | `password123` | Customer | **₹5,000.00** |
-| **Priya Patel** | `user2@test.com` | `password123` | Customer | **₹5,000.00** |
-| **Administrator** | `admin@payben.com` | `admin123` | Admin | Staff Portal |
-
-*🎁 Bonus: Every new registration receives an instant ₹500 welcome credit automatically!*
+Create a user account from the **Register** page, then sign in with the email and password you chose. Configure administrator credentials separately for the staff portal; do not use sample credentials in production.
 
 ---
 

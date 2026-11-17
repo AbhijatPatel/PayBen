@@ -36,7 +36,7 @@ Register a new user account.
 | full_name        | string | Yes      | Min 3 characters                  |
 | email            | string | Yes      | Valid email address               |
 | mobile           | string | Yes      | 10-digit Indian mobile number     |
-| password         | string | Yes      | Min 8 characters                  |
+| password         | string | Yes      | Min 6 characters                  |
 | confirm_password | string | Yes      | Must match password               |
 
 **Example Request:**
@@ -85,21 +85,26 @@ Authenticate a user and start a session.
 ```bash
 curl -c cookies.txt -X POST http://localhost/PayBen/api/auth/login.php \
   -H "Content-Type: application/json" \
-  -d '{"email":"user1@test.com","password":"password123"}'
+  -d '{"email":"you@example.com","password":"your-password"}'
 ```
 
 **Success Response (200):**
 ```json
 {
   "success": true,
-  "message": "Login successful. Welcome back, Rahul Sharma!",
+  "message": "Authentication successful.",
   "data": {
-    "user_id": 1,
-    "full_name": "Rahul Sharma",
-    "email": "user1@test.com",
-    "mobile": "9876543210",
-    "wallet_balance": 5000.00,
-    "wallet_balance_fmt": "₹5,000.00"
+    "user": {
+      "id": 123,
+      "full_name": "Example User",
+      "email": "you@example.com",
+      "mobile": "9876543210"
+    },
+    "wallet": {
+      "balance": 500.00,
+      "formatted_balance": "₹500.00"
+    },
+    "token": "<PayBen auth token>"
   }
 }
 ```
@@ -107,6 +112,40 @@ curl -c cookies.txt -X POST http://localhost/PayBen/api/auth/login.php \
 **Error Response (401):**
 ```json
 { "success": false, "message": "Invalid email or password." }
+```
+
+---
+
+### POST /auth/google.php
+Authenticate with a Google Identity Services ID token. The frontend must send Google's returned `credential` value; user profile fields are never accepted as proof of identity.
+
+```json
+{ "credential": "<Google ID token>" }
+```
+
+The backend downloads Google's public signing certificates over HTTPS, verifies the token signature locally, and checks its issuer, expiration, verified email, and audience against `GOOGLE_CLIENT_ID`. A valid token creates a PayBen account when the email is unused, or signs in to an account already linked to that Google identity. If the email belongs to an unlinked password account, the user must first authenticate to that account in the same browser session before Google can be linked.
+
+---
+
+### POST /auth/request-password-reset.php
+Request a password reset for an email address. The response is the same whether an account exists, to reduce account enumeration.
+
+```json
+{ "email": "you@example.com" }
+```
+
+In development with the mock email provider, the response may contain a clearly labelled `development_reset_url`. Reset tokens are returned only in that development response and are carried in the URL fragment, not sent to the web server in the request URL. Production requires `EMAIL_PROVIDER=brevo` and a configured `BREVO_API_KEY`.
+
+### POST /auth/reset-password.php
+Consume a reset link once and set a new password. The token is sent in the request body and stored server-side only as a SHA-256 hash. Links expire after 30 minutes.
+
+```json
+{
+  "email": "you@example.com",
+  "token": "<reset token>",
+  "password": "<new password>",
+  "confirm_password": "<new password>"
+}
 ```
 
 ---

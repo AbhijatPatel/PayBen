@@ -124,12 +124,53 @@ You should see the PayBen landing page with "Get Started" and "Login" buttons.
 
 ---
 
-## Step 7 — Test Login
+## Step 7 — Configure Google Sign-In (Optional)
+
+PayBen uses Google Identity Services' sign-in button to obtain an ID token. The backend downloads Google's public signing certificates over HTTPS and verifies the token signature locally with PHP OpenSSL, then checks the issuer, expiration, verified email, and OAuth client audience. No Google client secret or redirect URI is used by this popup flow.
+
+1. In Google Cloud Console, select or create a project and configure the OAuth consent screen (including test users while the app is in testing).
+2. Create an **OAuth client ID** of type **Web application**.
+3. Under **Authorized JavaScript origins**, add each origin used by the app:
+   - `http://127.0.0.1:5173` (the Vite development server default)
+   - `http://localhost:5173` (if you open the app using `localhost`)
+   - `https://frontend-3p6j.vercel.app` (the current live deployment)
+4. **Authorized redirect URIs:** none are required for this popup-based ID-token flow.
+5. Copy the OAuth client ID (not a client secret) into both configuration files:
+   - `frontend/.env`: `VITE_GOOGLE_CLIENT_ID=your-web-client-id`
+   - `backend/.env`: `GOOGLE_CLIENT_ID=your-web-client-id`
+6. For deployment, set `VITE_GOOGLE_CLIENT_ID` in Vercel and `GOOGLE_CLIENT_ID` in Railway to the same web client ID. Set Railway's `FRONTEND_URL` to `https://frontend-3p6j.vercel.app` and add that origin to the Google client's authorized JavaScript origins.
+
+Copy `frontend/.env.example` to `frontend/.env` and `backend/.env.example` to `backend/.env` as needed. On Windows PHP installs that cannot verify Google's certificate chain, download the PEM CA bundle from `https://curl.se/ca/cacert.pem`, save it as `backend/certs/cacert.pem`, and set `GOOGLE_CA_BUNDLE=C:\PayBen\backend\certs\cacert.pem` in the local backend environment. TLS peer and hostname verification remain enabled. Restart PHP and Vite after changing environment variables. If the Google client ID is missing, Google sign-in reports that configuration is required and does not create or authenticate a user.
+
+To link Google to an existing password account, first sign in with that password in the same browser session, then open the sign-in page and complete Google sign-in with the matching verified email. An unauthenticated Google sign-in cannot take over an existing email account.
+
+## Local Development (Windows PowerShell)
+
+Start MySQL first and set the existing database password in `backend/.env` as `DB_PASS=...`. The checked-in local configuration currently has no database password, while MySQL requires one; do not reset or recreate the database to work around this.
+
+In the first PowerShell terminal:
+
+```powershell
+Set-Location C:\PayBen\backend
+php -S 127.0.0.1:8000 router.php
+```
+
+In a second PowerShell terminal:
+
+```powershell
+Set-Location C:\PayBen\frontend
+npm run dev -- --host 127.0.0.1
+```
+
+Open `http://127.0.0.1:5173/login`. Vite proxies `/api` requests to `http://127.0.0.1:8000`; the configured `VITE_API_BASE_URL=/api` keeps the backend URL out of page components. Set `FRONTEND_URL` to the frontend's exact origin on deployment. The backend now permits only configured/local origins rather than every Vercel subdomain.
+
+For development password recovery, leave `APP_ENV=development` and `EMAIL_PROVIDER=mock`; the page displays a clearly labelled, single-use reset link for an existing active account. Production password recovery requires `APP_ENV=production`, `EMAIL_PROVIDER=brevo`, and a configured `BREVO_API_KEY`; reset tokens are never returned by the production API. Use a unique random `APP_SECRET` in production (generate one with `php -r "echo bin2hex(random_bytes(32));"`), and never commit `.env` files.
+
+## Step 8 — Test Login
 
 **User Login:**
-- URL: `http://localhost/PayBen/login.php`
-- Email: `user1@test.com`
-- Password: `password123`
+- URL: `http://127.0.0.1:5173/login`
+- Register a new account, then sign in using the email and password you chose.
 
 **Admin Login:**
 - URL: `http://localhost/PayBen/admin/login.php`
@@ -145,7 +186,7 @@ After setup, verify the following:
 ### Authentication
 - [ ] Landing page loads correctly with animations
 - [ ] Register page — register a new user
-- [ ] Login with `user1@test.com / password123` → redirects to dashboard
+- [ ] Sign in with a registered account → redirects to dashboard
 - [ ] Invalid login shows error message
 - [ ] Logout clears session and redirects to login
 

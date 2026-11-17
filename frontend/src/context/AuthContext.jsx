@@ -61,8 +61,8 @@ export const AuthProvider = ({ children }) => {
     return res;
   };
 
-  const register = async (fullName, email, mobile, password) => {
-    const res = await authService.register(fullName, email, mobile, password);
+  const register = async (fullName, email, mobile, password, confirmPassword) => {
+    const res = await authService.register(fullName, email, mobile, password, confirmPassword);
     if (res.success && res.data) {
       setUser(res.data.user);
       setWallet(res.data.wallet);
@@ -71,9 +71,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await authService.logout();
-    setUser(null);
-    setWallet({ balance: 0, formatted_balance: '₹0.00' });
+    try {
+      await authService.logout();
+    } finally {
+      setUser(null);
+      setWallet({ balance: 0, formatted_balance: '₹0.00' });
+    }
   };
 
   return (

@@ -6,6 +6,8 @@ import { AdminLayout } from '../layouts/AdminLayout';
 
 import { Home } from '../pages/Home';
 import { Login } from '../pages/auth/Login';
+import { ForgotPassword } from '../pages/auth/ForgotPassword';
+import { ResetPassword } from '../pages/auth/ResetPassword';
 import { Register } from '../pages/auth/Register';
 import { Dashboard } from '../pages/dashboard/Dashboard';
 import { WalletPage } from '../pages/wallet/Wallet';
@@ -71,6 +73,8 @@ export const AppRoutes = () => {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password" element={<ResetPassword />} />
         <Route path="register" element={<Register />} />
 
         {/* Protected User Routes */}

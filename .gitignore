@@ -1,4 +1,6 @@
 # Environment & Databases
+/backend/.env
+/backend/certs/cacert.pem
 mysql_data/
 *.log
 *.tmp

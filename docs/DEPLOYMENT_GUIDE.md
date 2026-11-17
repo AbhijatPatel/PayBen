@@ -18,7 +18,7 @@ This guide walks you through deploying PayBen into production with zero cost usi
 ### 2. Import Database Schema
 1. Click the **Data** tab on your Railway MySQL card (or connect using DBeaver / TablePlus / MySQL Workbench using the connection credentials from the **Connect** tab).
 2. Open [`backend/database/payben_db.sql`](../backend/database/payben_db.sql) from your repo and execute the script.
-3. This creates all 9 tables (`users`, `wallets`, `transactions`, `operators`...) and seeds test accounts (`user1@test.com`, `user2@test.com`, `admin@payben.com`).
+3. This creates the application tables and loads the repository's sample data. Review and remove development-only records before using the database in production.
 
 ### 3. Deploy PHP Backend
 1. In the same Railway project, click **+ New** (top right) $\rightarrow$ **GitHub Repo**.
@@ -28,7 +28,7 @@ This guide walks you through deploying PayBen into production with zero cost usi
    - Under **Build Command**, leave empty (Railway detects the `Dockerfile` in `backend/`).
 4. Go to the **Variables** tab and click **New Variable**:
    - `DATABASE_URL` = (Click **Add Reference** and select `${{MySQL.MYSQL_URL}}` — Railway links them automatically!)
-   - `FRONTEND_URL` = `https://your-payben-app.vercel.app` (you can update this after deploying on Vercel)
+   - `FRONTEND_URL` = `https://frontend-3p6j.vercel.app` (the current live deployment)
 5. Go to **Settings** $\rightarrow$ **Networking** $\rightarrow$ click **Generate Domain**.
 6. Copy your public backend URL (e.g., `https://payben-backend-production.up.railway.app`).
 7. Verify by opening in browser: `https://your-backend-url/index.php`. It should return:
@@ -53,7 +53,8 @@ This guide walks you through deploying PayBen into production with zero cost usi
    - Output Directory: `dist` (auto-detected)
 2. Expand the **Environment Variables** section and add:
    - **Name:** `VITE_API_BASE_URL`
-   - **Value:** `https://your-railway-backend-url.up.railway.app/api`
+   - **Value:** `https://payben-production.up.railway.app/api`
+   - Also set `VITE_GOOGLE_CLIENT_ID` to the Google Web OAuth client ID.
 3. Click **Deploy**!
 
 Vercel will build and deploy your React application in ~45 seconds and give you a live URL like `https://payben.vercel.app`.
@@ -63,8 +64,8 @@ Vercel will build and deploy your React application in ~45 seconds and give you 
 ## Part 3: Final CORS Handshake
 
 1. Return to your **Railway** backend service.
-2. Go to **Variables** and ensure `FRONTEND_URL` is set to your live Vercel URL (e.g. `https://payben.vercel.app`).
-3. PayBen's built-in CORS middleware also automatically accepts all `*.vercel.app` domains.
+2. Go to **Variables** and ensure `FRONTEND_URL` is `https://frontend-3p6j.vercel.app` and `GOOGLE_CLIENT_ID` is set to the same Web OAuth client ID used by Vercel.
+3. PayBen's CORS middleware allows the exact `FRONTEND_URL` origin and configured local origins. Do not use wildcard preview-domain access; update `FRONTEND_URL` when deploying to a different frontend domain.
 
 ---
 

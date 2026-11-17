@@ -46,11 +46,11 @@ class User {
     public static function linkGoogleId(int $userId, string $googleId, ?string $avatar = null): bool {
         $pdo = getDBConnection();
         if ($avatar) {
-            $stmt = $pdo->prepare("UPDATE users SET google_id = ?, avatar = COALESCE(avatar, ?), updated_at = NOW() WHERE id = ?");
-            return $stmt->execute([$googleId, $avatar, $userId]);
+            $stmt = $pdo->prepare("UPDATE users SET google_id = ?, avatar = COALESCE(avatar, ?), updated_at = NOW() WHERE id = ? AND google_id IS NULL");
+            return $stmt->execute([$googleId, $avatar, $userId]) && $stmt->rowCount() === 1;
         }
-        $stmt = $pdo->prepare("UPDATE users SET google_id = ?, updated_at = NOW() WHERE id = ?");
-        return $stmt->execute([$googleId, $userId]);
+        $stmt = $pdo->prepare("UPDATE users SET google_id = ?, updated_at = NOW() WHERE id = ? AND google_id IS NULL");
+        return $stmt->execute([$googleId, $userId]) && $stmt->rowCount() === 1;
     }
 
     public static function createGoogleUser(string $fullName, string $email, string $googleId, ?string $avatar = null): int {
@@ -164,6 +164,85 @@ class User {
         $hash = password_hash($newPassword, PASSWORD_BCRYPT);
         $stmt = $pdo->prepare("UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?");
         return $stmt->execute([$hash, $id]);
+    }
+
+    public static function hasRecentPasswordReset(string $email): bool {
+        $pdo = getDBConnection();
+        $stmt = $pdo->prepare("
+            SELECT 1
+            FROM password_reset_tokens
+            WHERE email = ? AND created_at > DATE_SUB(NOW(), INTERVAL 60 SECOND)
+            LIMIT 1
+        ");
+        $stmt->execute([$email]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    public static function storePasswordResetToken(string $email, string $tokenHash, string $expiresAt): bool {
+        $pdo = getDBConnection();
+        $stmt = $pdo->prepare("
+            INSERT INTO password_reset_tokens (email, token_hash, expires_at)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+                token_hash = VALUES(token_hash),
+                expires_at = VALUES(expires_at),
+                created_at = CURRENT_TIMESTAMP
+        ");
+        return $stmt->execute([$email, $tokenHash, $expiresAt]);
+    }
+
+    public static function deletePasswordResetToken(string $email): bool {
+        $pdo = getDBConnection();
+        $stmt = $pdo->prepare("DELETE FROM password_reset_tokens WHERE email = ?");
+        return $stmt->execute([$email]);
+    }
+
+    public static function resetPasswordWithToken(string $email, string $tokenHash, string $newPassword): bool {
+        $pdo = getDBConnection();
+        $pdo->beginTransaction();
+        try {
+            $stmt = $pdo->prepare("
+                SELECT token_hash, expires_at
+                FROM password_reset_tokens
+                WHERE email = ?
+                FOR UPDATE
+            ");
+            $stmt->execute([$email]);
+            $reset = $stmt->fetch();
+            if (
+                !$reset
+                || strtotime($reset['expires_at']) <= time()
+                || !hash_equals($reset['token_hash'], $tokenHash)
+            ) {
+                $pdo->rollBack();
+                return false;
+            }
+
+            $passwordHash = password_hash($newPassword, PASSWORD_BCRYPT);
+            if ($passwordHash === false) {
+                throw new RuntimeException('Password hashing failed.');
+            }
+            $stmt = $pdo->prepare("
+                UPDATE users
+                SET password_hash = ?, updated_at = NOW()
+                WHERE email = ? AND status = 'active'
+            ");
+            $stmt->execute([$passwordHash, $email]);
+            if ($stmt->rowCount() !== 1) {
+                $pdo->rollBack();
+                return false;
+            }
+
+            $stmt = $pdo->prepare("DELETE FROM password_reset_tokens WHERE email = ?");
+            $stmt->execute([$email]);
+            $pdo->commit();
+            return true;
+        } catch (Throwable $error) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $error;
+        }
     }
 
     public static function getNetworkContacts(int $excludeUserId, int $limit = 6): array {

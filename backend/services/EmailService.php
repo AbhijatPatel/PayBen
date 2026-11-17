@@ -44,12 +44,21 @@ class EmailService {
             'content-type: application/json'
         ]);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS);
 
         $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
         curl_close($ch);
 
-        return ($httpCode >= 200 && $httpCode < 300);
+        if ($response === false || $httpCode < 200 || $httpCode >= 300) {
+            error_log("Brevo email delivery failed (HTTP {$httpCode}): {$error}");
+            return false;
+        }
+        return true;
     }
 
     /**
